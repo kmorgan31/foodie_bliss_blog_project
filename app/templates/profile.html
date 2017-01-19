@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="container">
+    <div class="card hovercard">
+        <div class="cardheader">
+
+        </div>
+
+        <div class="avatar col-sm-2">
+            <!--<img class="img-circle img-responsive" alt="" src="http://lorempixel.com/100/100/people/9/">-->
+            <img class="img-circle img-responsive" alt="" src="{{ url_for('uploads', filename=user.img_path) }}" />
+        </div>
+        <div class="info col-sm-9">
+            <div class="title">{{user.username}}</div>
+            <div class="desc" style="min-height:70px;">{{user.bio}}</div>
+        </div>
+        
+        <div class="settings">
+            <a href="{{url_for('settings') }}"><span class="glyphicon glyphicon-cog"></span></a>
+        </div>
+        
+        <div class="bottom col-sm-2">
+            {% if user.twitter_url!="" %}
+            <a class="btn btn-primary btn-twitter btn-sm social-btns" href="{{user.twitter_url}}" target="_blank">
+                <i class="fa fa-twitter"></i>
+            </a>
+            {% endif %}
+            
+            {% if user.gplus_url!="" %}
+            <a class="btn btn-danger btn-sm social-btns" href="{{user.gplus_url}}" target="_blank">
+                <i class="fa fa-google-plus"></i>
+            </a>
+            {% endif %}
+            
+            {% if user.fbk_url!="" %}
+            <a class="btn btn-primary btn-sm social-btns" href="{{user.fbk_url}}" target="_blank">
+                <i class="fa fa-facebook"></i>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+    
+    <br>
+    
+    <div class="post_box">
+        <div class="post_title">
+            <h3>Posts</h3>
+        </div>
+        <div class="container-fluid post_list">
+            {% include 'postlist.html' %}
+        </div>
+    </div>
+    
+</div>
+{% endblock %}

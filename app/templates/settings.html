@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="container" style="padding-top:25px">
+    <form id="edit_profile_form" method="post" action="/edit_profile" class="form-horizontal" data-toggle="validator" role="form">
+
+        <div class="form-group">
+            <label for="username" class="control-label col-xs-2">Username</label>
+            <div class="col-xs-10">
+                <input id="username" name="username" class="form-control" type="text" value="{{user.username}}" data-error="Who are you?" required/>
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="email" class="control-label col-xs-2">Email</label>
+            <div class="col-xs-10">
+                <input id="email" name="email" class="form-control" type="text" value="{{user.email}}" />
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="bio" class="control-label col-xs-2">Bio</label>
+            <div class="col-xs-10">
+                <textarea id="bio" name="bio" class="form-control" rows="5" style="resize: none;">{{user.bio}}</textarea>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="twitter" class="control-label col-xs-2">Twitter</label>
+            <div class="col-xs-10">
+                <input id="twitter" name="twitter_url" class="form-control" type="text" value="{{user.twitter_url}}" />
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="G+" class="control-label col-xs-2">G+</label>
+            <div class="col-xs-10">
+                <input id="gplus" name="gplus_url" class="form-control col-xs-10" type="text" value="{{user.gplus_url}}"/>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="facebook" class="control-label col-xs-2">Facebook</label>
+            <div class="col-xs-10">
+                <input id="facebook" name="fbk_url" class="form-control col-xs-10" type="text" value="{{user.fbk_url}}"/>
+            </div>
+        </div>
+        
+        <input type="hidden" name="user_id" value="{{user.id}}" />
+        
+        <div class="form-group col-xs-12" style="padding-top:20px;">
+            <button type="submit" class="btn btn-default text-center center-block">Update</button>
+        </div>
+    </form>
+    
+</div>
+{% endblock %}

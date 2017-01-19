@@ -1,0 +1,182 @@
+.post_title {
+    color: #EB008A;
+    font-family: 'Josefin Sans', sans-serif;
+    letter-spacing: 1px;
+}
+
+.sidenav > p > a {
+    color: #EB008A;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+div>table {
+  float: left
+}
+
+/*#searchboxdiv {*/
+/*  line-height: 80px;*/
+/*  vertical-align: middle;*/
+/*}*/
+
+/*.navbar-nav > li > a {*/
+/*   line-height: 80px;*/
+/*}*/
+
+.navbar {
+    margin-bottom: 0;
+    background-color: white;
+    z-index: 9999;
+    /*border: 0;*/
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 14px !important;
+    /*line-height: 1.42857143 !important;*/
+    letter-spacing: 4px;
+    border-radius: 0;
+}
+
+.navbar li a, .navbar .navbar-brand {
+    color: #09B1EE !important;
+}
+
+.navbar-nav li a:hover, .navbar-nav li.active a {
+    color: #EB008A !important;
+}
+
+.navbar-default .navbar-toggle {
+    border-color: transparent;
+    color: #09B1EE !important;
+}
+
+.btn-danger {
+    background-color: #E9573F;
+    border-color: #E9573F;
+    color: white;
+}
+
+.bs-callout {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: #eee;
+    border-image: none;
+    border-radius: 3px;
+    border-style: solid;
+    border-width: 1px 1px 1px 5px;
+    margin-bottom: 10px;
+    padding: 20px;
+}
+.bs-callout:last-child {
+    margin-bottom: 0px;
+}
+.bs-callout h4 {
+    margin-bottom: 10px;
+    margin-top: 0;
+}
+
+.bs-callout-danger {
+    border-left-color: #09B1EE;
+}
+
+.bs-callout-danger h4{
+    color: #09B1EE;
+}
+
+.bs-callout > div{
+    border-bottom-color: #eee;
+}
+
+.card.hovercard {
+    position: relative;
+    padding-top: 0;
+    overflow: hidden;
+    text-align: center;
+    background-color: rgba(214, 224, 226, 0.2);
+    padding-bottom:15px;
+}
+
+.card.hovercard .cardheader {
+    background: url("http://lorempixel.com/850/280/nature/4/");
+    background-size: cover;
+    height: 135px;
+}
+
+.card.hovercard .avatar {
+    position: relative;
+    top: -50px;
+    margin-bottom: -50px;
+}
+
+.card.hovercard .avatar img {
+    width: 150px;
+    height: 150px;
+    max-width: 150px;
+    max-height: 150px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    border: 5px solid rgba(255,255,255,0.5);
+}
+
+.card.hovercard .info {
+    padding: 10px 8px 10px;
+    text-align: left;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+.card.hovercard > .settings {
+    padding: 12px;
+    text-align: right;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+.card.hovercard > .settings > a{
+    color: #EB008A;
+}
+
+.card.hovercard .info .title {
+    margin-bottom: 4px;
+    font-size: 28px;
+    line-height: 1;
+    color: #EB008A;
+    vertical-align: middle;
+}
+
+
+.card.hovercard .info .desc {
+    overflow: hidden;
+    font-size: 14px;
+    line-height: 20px;
+    color: #737373;
+    text-overflow: ellipsis;
+}
+
+.card.hovercard .bottom {
+    padding: 0 10px;
+    margin-bottom: 17px;
+}
+
+.social-btns{ border-radius: 50%; width:32px; height:32px; line-height:18px;  }
+
+footer {
+    /*position:absolute;*/
+    padding-top:30px;
+    width:100%;
+    bottom:0px;
+}
+
+.desc {
+    overflow: hidden;
+    font-size: 14px;
+    line-height: 20px;
+    color: #737373;
+    text-overflow: ellipsis;
+}
+
+.post-link {
+    color: #09B1EE;
+}
+
+.settings > a{
+    color: #EB008A;
+}

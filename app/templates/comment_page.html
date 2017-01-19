@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+<div class="container" style="padding-top:25px">
+    
+    <form id="add_comment_form" method="post" action="/add_comment" class="form" data-toggle="validator" role="form">
+        
+        <div class="form-group col-xs-12">
+            <textarea id="content" name="content" placeholder="Comment on this post..." class="form-control" rows="5" style="resize: none;" data-error="Bruh, you need to write something." required></textarea>
+            <div class="help-block with-errors"></div>
+        </div>
+        
+        <div class="form-group" style="padding-top:120px;">
+            <button type="submit" class="btn btn-default text-center center-block">Comment</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

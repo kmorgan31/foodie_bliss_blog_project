@@ -1,0 +1,65 @@
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-left" href="{{url_for('index') }}"><img class="img-responsive" style="max-height:50px;max-width:100px;" src="../static/img/logo.png" /></a>
+        </div>
+        
+        <ul class="nav navbar-nav">
+            <li><a href="{{url_for('index') }}">HOME</a></li>
+            <li><a href="{{url_for('about') }}">ABOUT</a></li>
+        </ul>
+        
+        <div id="searchboxdiv">
+            <form class="navbar-form navbar-left">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search">
+                    <div class="input-group-btn">
+                        <button class="btn btn-default" type="submit">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+        <div class="nav navbar-nav navbar-right">
+            <ul class="nav navbar-nav">
+                {% if username!=None %}
+                    <li><a href="{{url_for('profile') }}">{{username}}</a></li>
+                    <li><a data-toggle="modal" data-target="#post_modal"><span class="glyphicon glyphicon-upload"></span></a></li>
+                    <li><a href="{{url_for('logout') }}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                {% else %}
+                    <li><a href="{{url_for('signup') }}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                    <li><a href="{{url_for('login') }}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                {% endif %}
+            </ul>
+        </div>
+        
+    </div>
+</nav>
+
+<div class="modal fade" id="post_modal" tabindex="-1" style="padding-top:100px;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">New Post</h4>
+            </div>
+            <div class="modal-body">
+                <form id="add_form" method="post" action="/add_post" class="form" data-toggle="validator" role="form">
+                    <div class="form-group col-xs-12">
+                        <input id="title" name="title" class="form-control" type="text" placeholder="Title" data-error="Bruh, you need a title." required/>
+                        <div class="help-block with-errors"></div>
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <textarea id="content" name="content" placeholder="Write what's on your mind..." class="form-control" rows="5" style="resize: none;" data-error="Bruh, you need some content." required></textarea>
+                        <div class="help-block with-errors"></div>
+                    </div>
+                    <button type="submit" class="btn btn-default text-center center-block">Post</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
