@@ -173,6 +173,11 @@ footer {
     color: #09B1EE;
 }
 
+.post-author-link {
+    color: #737373;
+    font-weight: bold;
+}
+
 .settings {
     color: #EB008A;
 }

@@ -186,10 +186,10 @@ def profile(userid=None):
 def follow(followed_id):
     
     # load current user
-    current_user = db.session.query.filter_by(id=session['userid']).first()
+    current_user = db.session.query(User).filter_by(id=session['userid']).first()
     
     # load user to follow
-    follow_user = db.session.query.filter_by(id=followed_id).first()
+    follow_user = db.session.query(User).filter_by(id=followed_id).first()
     
     # append follow
     u = current_user.follow(follow_user)
@@ -203,10 +203,10 @@ def follow(followed_id):
 def unfollow(followed_id):
     
     # load current user
-    current_user = db.session.query.filter_by(id=session['userid']).first()
+    current_user = db.session.query(User).filter_by(id=session['userid']).first()
     
     # load user to unfollow
-    follow_user = db.session.query.filter_by(id=followed_id).first()
+    follow_user = db.session.query(User).filter_by(id=followed_id).first()
     
     u = current_user.unfollow(follow_user)
 

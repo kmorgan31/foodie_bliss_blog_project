@@ -17,16 +17,16 @@
         </div>
         
         <div class="col-sm-2 settings">
-            <p> {{ user.followers.count() }} followers | 
+            <p> {{ user.followers.count() }} follower{% if user.followers.count()>1 %}s{% endif %} | 
             
                 {% if user.id == session['userid'] %}
                     <a class="settings" href="{{url_for('settings') }}"><span class="glyphicon glyphicon-cog"></span></a>
                 
                 {% else %}
                     {% if not isFollowing %}
-                          <a href="{{ url_for('follow', nickname=user.nickname) }}"><span class="glyphicon glyphicon-heart-empty"></a>
+                          <a class="settings" href="{{ url_for('follow', followed_id=user.id) }}"><span class="glyphicon glyphicon-heart-empty"></a>
                     {% else %}
-                          <a href="{{ url_for('unfollow', nickname=user.nickname) }}"><span class="glyphicon glyphicon-heart"></a>
+                          <a class="settings" href="{{ url_for('unfollow', followed_id=user.id) }}"><span class="glyphicon glyphicon-heart"></a>
                     {% endif %}
                 {% endif %}   
             </p>
