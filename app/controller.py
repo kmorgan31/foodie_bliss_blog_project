@@ -1,9 +1,11 @@
 from app import app, db
 from app.models import Post, User, Comment
 
+import os
 from flask import Flask
 from flask import render_template #allow use of html templates
 from flask import request, redirect, url_for, session, send_from_directory
+from werkzeug.utils import secure_filename
 
 
 @app.route('/')
@@ -130,20 +132,22 @@ def edit_profile():
         
     user = db.session.query(User).filter_by(id=userid).first()
     user.username = request.form['username']
-    print "1"
     user.email = request.form['email']
-    print "2"
     user.bio = request.form['bio']
-    print "3"
     user.twitter_url = request.form['twitter_url']
-    print "4"
     user.gplus_url = request.form['gplus_url']
-    print "5"
     user.fbk_url = request.form['fbk_url']
-    print "6"
+
+    file = request.files['file']
+
+    # Check if the file is one of the allowed types/extensions
+    if file and allowed_file(file.filename):
+        filename = str(session['userid']) + "_" + secure_filename(file.filename)
+        file.save(os.path.join(os.getcwd() + "/app/" + app.config['UPLOAD_FOLDER'], filename))
+        user.img_path = filename
+    
     db.session.commit() #save database
-    print"7"
-    return redirect(session['path'])
+    return redirect(url_for('profile'))
     
         
 @app.route('/post/<int:postid>')
@@ -197,6 +201,11 @@ def get_currentusername():
 
 def set_session_path(page):
     session['path'] = page
+
+# For a given file, return whether it's an allowed type or not
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in app.config['ALLOWED_EXTENSIONS']
 
 if __name__ == "__main__": #checks that we only run app when name is called directly (as main)
     app.run(host="0.0.0.0", port=8080, debug=True) #start webserver/app
