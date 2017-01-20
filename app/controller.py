@@ -155,31 +155,65 @@ def post(postid):
     username = get_currentusername()
 
     #get comments associated with post
-    comment_list = []
     comment_list = db.session.query(Comment, User).filter_by(post_id=postid).join(User).filter(Comment.created_by==User.id).order_by(Comment.created_at.desc()).all()
 
     post = db.session.query(Post, User).filter_by(id=postid).join(User).filter(Post.created_by==User.id).first()
     return render_template("post.html", username=username, post=post, comment_list=comment_list) #generates html based on template
 
+
 @app.route('/profile')
 @app.route('/profile/<int:userid>')
 def profile(userid=None):
+    set_session_path("/profile")
     username = get_currentusername()
     
     if(userid==None):
         #get currentuserid
         userid = session['userid']
-    
-    set_session_path("/profile")
-    
-    #get posts by current user
-    post_list = []
-    post_list = db.session.query(Post, User).filter_by(created_by=userid).join(User).filter(Post.created_by==User.id).order_by(Post.created_at.desc()).all()
-    
-    #get user
+
+    # load user of selected user
     user = db.session.query(User).filter_by(id=userid).first()
+
+    #get posts by current user
+    post_list = db.session.query(Post, User).filter_by(created_by=userid).join(User).filter(Post.created_by==User.id).order_by(Post.created_at.desc()).all()
+
+    #check if currentuser following selected user
+    isFollowing = db.session.query(followers).filter_by(follower_id=session['userid'], followed_id=userid).first() > 0
     
     return render_template("profile.html", username=username, user=user, post_list=post_list) #generates html based on template
+
+@app.route('/follow/<int:followed_id>')
+def follow(followed_id):
+    
+    # load current user
+    current_user = db.session.query.filter_by(id=session['userid']).first()
+    
+    # load user to follow
+    follow_user = db.session.query.filter_by(id=followed_id).first()
+    
+    # append follow
+    u = current_user.follow(follow_user)
+
+    db.session.add(u)
+    db.session.commit()
+    flash('Following!')
+    return redirect(url_for('profile', userid=followed_id))
+
+@app.route('/unfollow/<int:followed_id>')
+def unfollow(followed_id):
+    
+    # load current user
+    current_user = db.session.query.filter_by(id=session['userid']).first()
+    
+    # load user to unfollow
+    follow_user = db.session.query.filter_by(id=followed_id).first()
+    
+    u = current_user.unfollow(follow_user)
+
+    db.session.add(u)
+    db.session.commit()
+    flash('Unfollowing!')
+    return redirect(url_for('profile', userid=followed_id))
 
 @app.route('/uploads/<filename>')
 def uploads(filename):

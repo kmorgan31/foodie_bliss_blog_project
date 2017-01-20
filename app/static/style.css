@@ -18,10 +18,6 @@ div>table {
 /*  vertical-align: middle;*/
 /*}*/
 
-/*.navbar-nav > li > a {*/
-/*   line-height: 80px;*/
-/*}*/
-
 .navbar {
     margin-bottom: 0;
     background-color: white;
@@ -108,9 +104,9 @@ div>table {
 }
 
 .card.hovercard .avatar img {
-    width: 150px;
+/*    width: 150px;
     height: 150px;
-    max-width: 150px;
+    max-width: 150px;*/
     max-height: 150px;
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
@@ -177,6 +173,6 @@ footer {
     color: #09B1EE;
 }
 
-.settings > a{
+.settings {
     color: #EB008A;
 }
