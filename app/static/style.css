@@ -9,10 +9,6 @@
     font-family: 'Josefin Sans', sans-serif;
 }
 
-div>table {
-  float: left
-}
-
 /*#searchboxdiv {*/
 /*  line-height: 80px;*/
 /*  vertical-align: middle;*/
@@ -88,7 +84,7 @@ div>table {
     overflow: hidden;
     text-align: center;
     background-color: rgba(214, 224, 226, 0.2);
-    padding-bottom:15px;
+    padding-bottom: 20px;
 }
 
 .card.hovercard .cardheader {
@@ -120,16 +116,6 @@ div>table {
     font-family: 'Josefin Sans', sans-serif;
 }
 
-.card.hovercard > .settings {
-    padding: 12px;
-    text-align: right;
-    font-family: 'Josefin Sans', sans-serif;
-}
-
-.card.hovercard > .settings > a{
-    color: #EB008A;
-}
-
 .card.hovercard .info .title {
     margin-bottom: 4px;
     font-size: 28px;
@@ -150,6 +136,8 @@ div>table {
 .card.hovercard .bottom {
     padding: 0 10px;
     margin-bottom: 17px;
+    position: absolute;
+    bottom:0;
 }
 
 .social-btns{ border-radius: 50%; width:32px; height:32px; line-height:18px;  }
@@ -179,5 +167,7 @@ footer {
 }
 
 .settings {
-    color: #EB008A;
+    color: #EB008A;    
+    text-align: right;
+    font-family: 'Josefin Sans', sans-serif;
 }

@@ -8,7 +8,7 @@
           <h3 class="post_title" style="display:inline;">{{post[0].title}}</a> &nbsp; </h3>
           
           {% if session['username'] != post[1].username %}
-            <span class="desc">by {{post[1].username}}</span>
+            <span class="desc">by <a class="post-author-link" href="{{url_for('profile', userid=post[0].created_by) }}">{{post[1].username}}</a></span>
           {% endif %}
         </div>
 
@@ -17,7 +17,6 @@
           
           {% if session['path'] != '/' and session['username'] == post[1].username %}
             <a class="post-link" href="{{url_for('edit_post', postid=post[0].id) }}"><span class="glyphicon glyphicon-pencil"></span></a>
-            <!--<a class="post-link" href="{{url_for('delete_post', postid=post[0].id) }}"><span class="glyphicon glyphicon-remove"></span></a>-->
             <a class="post-link" data-toggle="modal" data-target="#delete_confirm_modal"><span class="glyphicon glyphicon-remove"></span></a>
           {% endif %}
         </div>
