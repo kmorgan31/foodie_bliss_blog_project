@@ -21,6 +21,12 @@
           {% endif %}
         </div>
 
+        <div class="col-sm-12">
+            {% for tag in selected_tag_list %}
+                <span class="label label-primary">{{ tag.name }}</span>
+            {% endfor %}
+        </div>
+
         <div class="col-sm-12" style="padding-top:15px;">
            {{post[0].content}}
         </div>

@@ -2,23 +2,58 @@ from . import db
 import datetime
 
 
+tags_relationship = db.Table('tags_relationship',
+    db.Column('tag_id', db.Integer, db.ForeignKey('Tag.id'), nullable=False),
+    db.Column('post_id', db.Integer, db.ForeignKey('Post.id'), nullable=False),
+    db.PrimaryKeyConstraint('post_id', 'tag_id')
+)
+
 class Post(db.Model):
     __tablename__ = "Post"
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200))
     content = db.Column(db.String(1000))
+    categories = db.relationship('Tag', secondary=tags_relationship, backref='Post')
     
     created_by = db.Column(db.Integer, db.ForeignKey("User.id"))
     created_at = db.Column(db.DateTime(timezone=True), default=datetime.datetime.utcnow)
     
+    comments = db.relationship('Comment', cascade='all,delete', backref='Post',lazy='dynamic')
+
+    def add_tag(self, tag):
+        if not self.is_tagged(tag):
+            self.categories.append(tag)
+            return self
+
+    def remove_tag(self, tag):
+        if self.is_tagged(tag):
+            self.categories.remove(tag)
+            return self
     
-    def __init__(self,title,content,user_id):
+    def is_tagged(self, tag):
+        return self.categories.filter(tags_relationship.c.tag_id == tag.id).count() > 0
+    
+    def get_post_tags(self):
+        return db.session.query(Tag.name).join(tags_relationship, (tags_relationship.c.tag_id == Tag.id)).filter(tags_relationship.c.post_id == self.id).all()
+
+    def __init__(self,title,content,user_id,tags=[]):
         self.title = title
         self.content = content
         self.created_by = user_id
+
+        for tagid in tags:
+            tag = db.session.query(Tag).filter_by(id=tagid).first()
+            self.categories.append(tag)
         
-    comments = db.relationship('Comment', cascade='all,delete', backref='Post',lazy='dynamic')
+       
+class Tag(db.Model):
+    __tablename__ = "Tag"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), unique=True, nullable=False)
     
+    def __init__(self,name):
+        self.name = name
+
 
 class Comment(db.Model):
     __tablename__ = "Comment"

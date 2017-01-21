@@ -96,7 +96,7 @@
 .card.hovercard .avatar {
     position: relative;
     top: -50px;
-    margin-bottom: -50px;
+    margin-bottom: -40px;
 }
 
 .card.hovercard .avatar img {
