@@ -4,7 +4,19 @@
     letter-spacing: 1px;
 }
 
-.sidenav > p > a {
+.sidenav {
+    margin-bottom: 0;
+    background-color: white;
+    z-index: 9999;
+    /*border: 0;*/
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 14px !important;
+    /*line-height: 1.42857143 !important;*/
+    letter-spacing: 4px;
+    border-radius: 0;
+}
+
+.sidenav li a {
     color: #EB008A;
     font-family: 'Josefin Sans', sans-serif;
 }

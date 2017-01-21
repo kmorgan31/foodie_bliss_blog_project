@@ -1,0 +1,20 @@
+<nav class="sidenav navbar-default">
+    <div class="container-fluid">
+        
+        <ul class="nav nav-pils nav-stacked">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-list"></span> Categories<span class="caret"></a>
+                <ul class="dropdown-menu">
+                  {% for tag in tag_list %}
+                    <li><a href="{{ tag.id }}">{{ tag.name }}</a></li>
+                  {% endfor %}
+                </ul>
+            </li>
+            
+            <!--<p><a href="#"><span class="glyphicon glyphicon-list"> Categories</a></p>-->
+            <li><a href="#"><span class="glyphicon glyphicon-fire"></span> Hot</a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-time"></span> Trending</a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-eye-open"></span> Subscribed</a></li>
+        </ul>
+    </div>
+</nav>
