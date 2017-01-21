@@ -13,12 +13,12 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200))
     content = db.Column(db.String(1000))
-    categories = db.relationship('Tag', secondary=tags_relationship, backref='Post')
     
     created_by = db.Column(db.Integer, db.ForeignKey("User.id"))
     created_at = db.Column(db.DateTime(timezone=True), default=datetime.datetime.utcnow)
     
-    comments = db.relationship('Comment', cascade='all,delete', backref='Post',lazy='dynamic')
+    categories = db.relationship('Tag', secondary=tags_relationship, backref='Post', lazy='dynamic')
+    comments = db.relationship('Comment', cascade='all,delete', backref='Post', lazy='dynamic')
 
     def add_tag(self, tag):
         if not self.is_tagged(tag):

@@ -131,12 +131,14 @@ def edit_post(postid=None):
         #delete tags associated with post
         for tag in tag_list:
             t = post.remove_tag(tag)
-            db.session.add(t)
+            
+            if(t!=None):
+                db.session.add(t)
         
         #add tags selected by user
-        selected_tag_ids = request.form.getlist('tag_dropdown')
-        for tagid in selected_tag_ids:
-            tag = db.session.query(Tag).filter_by(id=tagid).first()
+        selected_tag_names = [x.encode('UTF8') for x in request.form.getlist('tag_dropdown')]
+        for tag_name in selected_tag_names:
+            tag = db.session.query(Tag).filter_by(name=tag_name).first()
             t = post.add_tag(tag)
             db.session.add(t)
 
