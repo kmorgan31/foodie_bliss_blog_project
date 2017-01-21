@@ -71,6 +71,9 @@ class User(db.Model):
         self.password = password
         self.bio = "Tell me about yourself"
         self.img_path = "avatar.png"
+        self.twitter_url = ""
+        self.gplus_url = ""
+        self.fbk_url = ""
     
     def __repr__(self):
         return "User " + self.username

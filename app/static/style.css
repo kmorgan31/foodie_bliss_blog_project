@@ -136,8 +136,8 @@
 .card.hovercard .bottom {
     padding: 0 10px;
     margin-bottom: 17px;
-    position: absolute;
-    bottom:0;
+/*    position: absolute;
+    bottom:0;*/
 }
 
 .social-btns{ border-radius: 50%; width:32px; height:32px; line-height:18px;  }

@@ -7,61 +7,76 @@
 
         </div>
 
-        <div class="avatar col-sm-2">
-            <!--<img class="img-circle img-responsive" alt="" src="http://lorempixel.com/100/100/people/9/">-->
-            <img class="img-circle img-responsive" alt="" src="{{ url_for('uploads', filename=user.img_path) }}" />
+        <div class="col-sm-2">
+            <div class="avatar center-block">
+                <img class="img-circle img-responsive" alt="" src="{{ url_for('uploads', filename=user.img_path) }}" />
+            </div>
+
+             <div class="bottom center-block">
+                {% if user.twitter_url!="" %}
+                <a class="btn btn-primary btn-twitter btn-sm social-btns" href="{{user.twitter_url}}" target="_blank">
+                    <i class="fa fa-twitter"></i>
+                </a>
+                {% endif %}
+                
+                {% if user.gplus_url!="" %}
+                <a class="btn btn-danger btn-sm social-btns" href="{{user.gplus_url}}" target="_blank">
+                    <i class="fa fa-google-plus"></i>
+                </a>
+                {% endif %}
+                
+                {% if user.fbk_url!="" %}
+                <a class="btn btn-primary btn-sm social-btns" href="{{user.fbk_url}}" target="_blank">
+                    <i class="fa fa-facebook"></i>
+                </a>
+                {% endif %}
+            </div>
         </div>
+
         <div class="info col-sm-8">
             <div class="title">{{user.username}}</div>
             <div class="desc" style="min-height:70px;">{{user.bio}}</div>
         </div>
         
         <div class="col-sm-2 settings">
-            {{ user.followers.count() }} follower{% if user.followers.count()!=1 %}s{% endif %} | 
-            
-            {% if user.id == session['userid'] %}
-                <a class="settings" href="{{url_for('settings') }}"><span class="glyphicon glyphicon-cog"></span></a>
-            
-            {% else %}
-                {% if not isFollowing %}
-                      <a class="settings" href="{{ url_for('follow', followed_id=user.id) }}"><span class="glyphicon glyphicon-heart-empty"></a>
+            <p>
+                {{ user.followers.count() }} follower{% if user.followers.count()!=1 %}s{% endif %} | 
+                
+                {% if user.id == session['userid'] %}
+                    <a class="settings" href="{{url_for('settings') }}"><span class="glyphicon glyphicon-cog"></span></a>
+                
                 {% else %}
-                      <a class="settings" href="{{ url_for('unfollow', followed_id=user.id) }}"><span class="glyphicon glyphicon-heart"></a>
-                {% endif %}
-            {% endif %}   
-        </div>
-        
-        <div class="bottom col-sm-2">
-            {% if user.twitter_url!="" %}
-            <a class="btn btn-primary btn-twitter btn-sm social-btns" href="{{user.twitter_url}}" target="_blank">
-                <i class="fa fa-twitter"></i>
-            </a>
-            {% endif %}
-            
-            {% if user.gplus_url!="" %}
-            <a class="btn btn-danger btn-sm social-btns" href="{{user.gplus_url}}" target="_blank">
-                <i class="fa fa-google-plus"></i>
-            </a>
-            {% endif %}
-            
-            {% if user.fbk_url!="" %}
-            <a class="btn btn-primary btn-sm social-btns" href="{{user.fbk_url}}" target="_blank">
-                <i class="fa fa-facebook"></i>
-            </a>
-            {% endif %}
-        </div>
+                    {% if not isFollowing %}
+                          <a class="settings" href="{{ url_for('follow', followed_id=user.id) }}"><span class="glyphicon glyphicon-heart-empty"></a>
+                    {% else %}
+                          <a class="settings" href="{{ url_for('unfollow', followed_id=user.id) }}"><span class="glyphicon glyphicon-heart"></a>
+                    {% endif %}
+                {% endif %}   
+            </p>
+        </div>  
     </div>
     
     <br>
     
-    <div class="post_box">
-        <div class="post_title">
-            <h3>Posts</h3>
+    <div id="tabs" class="content_box">
+        <ul class="nav nav-tabs">
+          <li><a class="post_title" data-toggle="tab" href="#post_box">Posts</a></li>
+          <li><a class="post_title" data-toggle="tab" href="#comment_box">Comments</a></li>
+        </ul>
+        
+        <div class="tab-content">
+          <div id="post_box" class="tab-pane fade in active">
+            <div class="container-fluid post_list" style="padding-top:15px;">
+                {% include 'postlist.html' %}
+            </div>
+          </div>
+          
+          <div id="comment_box" class="tab-pane fade" style="padding-top:15px;">
+            <div class="container-fluid post_list">
+                {% include 'commentprofilelist.html' %}
+            </div>
+          </div>
         </div>
-        <div class="container-fluid post_list">
-            {% include 'postlist.html' %}
-        </div>
-    </div>
-    
+    </div>   
 </div>
 {% endblock %}

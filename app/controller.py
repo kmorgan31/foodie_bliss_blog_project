@@ -174,13 +174,14 @@ def profile(userid=None):
     # load user of selected user
     user = db.session.query(User).filter_by(id=userid).first()
 
-    #get posts by current user
+    #get posts and comments by current user
     post_list = db.session.query(Post, User).filter_by(created_by=userid).join(User).filter(Post.created_by==User.id).order_by(Post.created_at.desc()).all()
+    comment_list = db.session.query(Comment, Post, User).filter_by(created_by=userid).join(Post).filter(Comment.post_id==Post.id).join(User).filter(Post.created_by==User.id).order_by(Comment.created_at.desc()).all()
 
     #check if currentuser following selected user
     isFollowing = db.session.query(followers).filter_by(follower_id=session['userid'], followed_id=userid).first() > 0
     
-    return render_template("profile.html", username=username, user=user, post_list=post_list) #generates html based on template
+    return render_template("profile.html", username=username, user=user, post_list=post_list, comment_list=comment_list, isFollowing=isFollowing) #generates html based on template
 
 @app.route('/follow/<int:followed_id>')
 def follow(followed_id):
