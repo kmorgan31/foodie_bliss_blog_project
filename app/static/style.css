@@ -51,6 +51,10 @@
     color: #09B1EE !important;
 }
 
+hr {
+    margin:10px 0px;
+}
+
 .btn-danger {
     background-color: #E9573F;
     border-color: #E9573F;

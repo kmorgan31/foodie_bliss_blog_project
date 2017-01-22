@@ -2,16 +2,21 @@
 
 {% block main %}
 
-<div class="container" style="padding-top:25px">
+<div class="container">
     
+    <h3 class="post_title">Edit Post</h3>
+    <hr>
+
     <form id="edit_post_form" method="post" action="/edit_post" class="form" data-toggle="validator" role="form">
 
         <div class="form-group col-xs-12">
+            <label for="Title">Title</label>
             <input id="title" name="title" class="form-control" type="text" placeholder="Title" value="{{post.title}}" data-error="Bruh, you need a title." required/>
             <div class="help-block with-errors"></div>
         </div>
 
         <div class="form-group col-xs-12 bs-docs-example">
+            <label for="Categories">Categories</label>
             <select name="tag_dropdown" class="form-control selectpicker" multiple title="Categories">
             {% for tag in tag_list %}  
                 <option value="{{ tag.name }}">{{ tag.name }}</option>
