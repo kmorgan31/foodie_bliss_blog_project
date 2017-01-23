@@ -2,7 +2,7 @@
 A Python-Flask blog website.
 
 Technologies used:
-- Flask
+- Python - Flask
 - SQLAlchemy
 - PostgreSQL
 - JQuery
@@ -11,7 +11,16 @@ Technologies used:
 - HTML/CSS
 - JavaScript
 
-Features:
-- User management
-- Posts
-- Comments
+Current Features:
+- User management - Add New, Edit Profile
+- - Subscribe
+- Post management - Add, Edit, Delete
+- Comment management - Add, Delete
+
+Features to Implement:
+- Search Posts by Post title, category
+- Filter Posts by Category
+- Filter Posts by Hot, Trending
+- Filter Posts by User
+- View Followers, Followed
+- User Validation (Signup and Login)
