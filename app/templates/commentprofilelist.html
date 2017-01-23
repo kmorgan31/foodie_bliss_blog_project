@@ -18,7 +18,7 @@
           </div>
           
           <div class="col-sm-12">
-             {{comment[0].content}}
+             {{ comment[0].content | safe}}
           </div>
       </div>
       {% endfor %}

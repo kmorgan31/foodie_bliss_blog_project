@@ -208,7 +208,10 @@ def profile(userid=None):
     #check if currentuser following selected user
     isFollowing = db.session.query(followers).filter_by(follower_id=session['userid'], followed_id=userid).first() > 0
     
-    return render_template("profile.html", username=username, user=user, post_list=post_list, comment_list=comment_list, isFollowing=isFollowing, tag_list=tag_list) #generates html based on template
+    #check number following
+    numFollowing = db.session.query(followers).filter_by(follower_id=user.id).count()
+    
+    return render_template("profile.html", username=username, user=user, post_list=post_list, comment_list=comment_list, isFollowing=isFollowing, numFollowing=numFollowing, tag_list=tag_list) #generates html based on template
 
 @app.route('/follow/<int:followed_id>')
 def follow(followed_id):

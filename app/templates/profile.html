@@ -40,7 +40,7 @@
         
         <div class="col-sm-2 settings">
             <p>
-                {{ user.followers.count() }} follower{% if user.followers.count()!=1 %}s{% endif %} | 
+                {{ user.followers.count() }} follower{% if user.followers.count()!=1 %}s{% endif %} | {{ numFollowing }} following | 
                 
                 {% if user.id == session['userid'] %}
                     <a class="settings" href="{{url_for('settings') }}"><span class="glyphicon glyphicon-cog"></span></a>
