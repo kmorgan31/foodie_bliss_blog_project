@@ -10,26 +10,26 @@ from werkzeug.utils import secure_filename
 
 @app.route('/')
 def index():
-    username = get_currentusername()
+    currentuser = get_currentuser()
     set_session_path("/")
     tag_list = get_tags()
 
     #get all posts
     post_list = db.session.query(Post, User).join(User).filter(Post.created_by==User.id).order_by(Post.created_at.desc()).all()
     
-    return render_template("index.html", username=username, post_list=post_list, tag_list=tag_list) #generates html based on template
+    return render_template("index.html", currentuser=currentuser, post_list=post_list, tag_list=tag_list) #generates html based on template
 
 @app.route('/about')
 def about():
-    username = get_currentusername()
+    currentuser = get_currentuser()
     set_session_path("/about")
     tag_list = get_tags()
 
-    return render_template("about.html", username=username, tag_list=tag_list) #generates html based on template
+    return render_template("about.html", currentuser=currentuser, tag_list=tag_list) #generates html based on template
 
 @app.route('/signup', methods=['GET','POST'])
 def signup():
-    username = get_currentusername()
+    currentuser = get_currentuser()
     set_session_path("/signup")
     tag_list = get_tags()
 
@@ -49,12 +49,12 @@ def signup():
             return redirect(url_for("index"))
             
     else:
-        return render_template("signup.html", username=username, tag_list=tag_list) #generates html based on template
+        return render_template("signup.html", currentuser=currentuser, tag_list=tag_list) #generates html based on template
         
     
 @app.route('/login', methods=['GET','POST'])
 def login():
-    username = get_currentusername()
+    currentuser = get_currentuser()
     set_session_path("/login")
     tag_list = get_tags()
     
@@ -67,7 +67,7 @@ def login():
         else:
             return redirect(url_for("login"))
     else:
-        return render_template("login.html", username=username, tag_list=tag_list) #generates html based on template
+        return render_template("login.html", currentuser=currentuser, tag_list=tag_list) #generates html based on template
         
         
 @app.route('/logout')
@@ -85,38 +85,33 @@ def delete_post():
 
 @app.route('/add_post', methods=['POST'])
 def add_post():
-    username = get_currentusername()
+    currentuser = get_currentuser()
     tag_list = get_tags()
     # set_session_path("/add_post")
-    
-    if request.method == 'POST':
-        user = db.session.query(User).filter_by(username=username).first()
-        
-        selected_tag_ids = [x.encode('UTF8') for x in request.form.getlist('tag_dropdown')]
-        post= Post(request.form['title'], request.form['content'], user.id, selected_tag_ids) #create Recipe object from html fields
-        db.session.add(post) #add to database
-        db.session.commit() #save database
-        return redirect(session['path'])
+       
+    selected_tag_ids = [x.encode('UTF8') for x in request.form.getlist('tag_dropdown')]
+    post= Post(request.form['title'], request.form['content'], currentuser.id, selected_tag_ids) #create Recipe object from html fields
+    db.session.add(post) #add to database
+    db.session.commit() #save database
+    return redirect(session['path'])
 
 
 @app.route('/add_comment', methods=['POST'])
 def add_comment():
-    username = get_currentusername()
+    currentuser = get_currentuser()
     tag_list = get_tags()
     # set_session_path("/add_post")
     
-    if request.method == 'POST':
-        user = db.session.query(User).filter_by(username=username).first()
-        comment = Comment(request.form['content'], request.form['post_id'], user.id) #create Recipe object from html fields
-        db.session.add(comment) #add to database
-        db.session.commit() #save database
-        return redirect(url_for('post', postid=request.form['post_id']))
+    comment = Comment(request.form['content'], request.form['post_id'], currentuser.id) #create Recipe object from html fields
+    db.session.add(comment) #add to database
+    db.session.commit() #save database
+    return redirect(url_for('post', postid=request.form['post_id']))
 
 
 @app.route('/edit_post', methods=['GET','POST'])        
 @app.route('/edit_post/<int:postid>', methods=['GET','POST'])
 def edit_post(postid=None):
-    username = get_currentusername()
+    currentuser = get_currentuser()
     tag_list = get_tags()
     
     if(postid==None):
@@ -146,7 +141,7 @@ def edit_post(postid=None):
         return redirect(session['path'])
     else:
         selected_tag_names = [x.name.encode('UTF8') for x in post.get_post_tags()]
-        return render_template("edit_post.html", username=username, post=post, tag_list=tag_list, selected_tag_names=selected_tag_names) #generates html based on template
+        return render_template("edit_post.html", currentuser=currentuser, post=post, tag_list=tag_list, selected_tag_names=selected_tag_names) #generates html based on template
         
 @app.route('/edit_profile', methods=['POST'])        
 def edit_profile():
@@ -174,7 +169,7 @@ def edit_profile():
         
 @app.route('/post/<int:postid>')
 def post(postid):
-    username = get_currentusername()
+    currentuser = get_currentuser()
     tag_list = get_tags()
 
     post = db.session.query(Post, User).filter_by(id=postid).join(User).filter(Post.created_by==User.id).first()
@@ -184,22 +179,22 @@ def post(postid):
 
     #get associated tags
     selected_tag_list = post[0].get_post_tags() 
-    return render_template("post.html", username=username, post=post, comment_list=comment_list, tag_list=tag_list, selected_tag_list=selected_tag_list) #generates html based on template
+    return render_template("post.html", currentuser=currentuser, post=post, comment_list=comment_list, tag_list=tag_list, selected_tag_list=selected_tag_list) #generates html based on template
 
 
 @app.route('/profile')
 @app.route('/profile/<int:userid>')
 def profile(userid=None):
     set_session_path("/profile")
-    username = get_currentusername()
+    currentuser = get_currentuser()
     tag_list = get_tags()
     
-    if(userid==None):
-        #get currentuserid
+    if(userid==None): #current user's profile selected
         userid = session['userid']
-
-    # load user of selected user
-    user = db.session.query(User).filter_by(id=userid).first()
+        user = currentuser
+    else:
+        # load user of selected user
+        user = db.session.query(User).filter_by(id=userid).first()
 
     #get posts and comments by current user
     post_list = db.session.query(Post, User).filter_by(created_by=userid).join(User).filter(Post.created_by==User.id).order_by(Post.created_at.desc()).all()
@@ -211,19 +206,20 @@ def profile(userid=None):
     #check number following
     numFollowing = db.session.query(followers).filter_by(follower_id=user.id).count()
     
-    return render_template("profile.html", username=username, user=user, post_list=post_list, comment_list=comment_list, isFollowing=isFollowing, numFollowing=numFollowing, tag_list=tag_list) #generates html based on template
+    return render_template("profile.html", currentuser=currentuser, user=user, post_list=post_list, comment_list=comment_list, isFollowing=isFollowing, numFollowing=numFollowing, tag_list=tag_list) #generates html based on template
 
 @app.route('/follow/<int:followed_id>')
 def follow(followed_id):
     
     # load current user
-    current_user = db.session.query(User).filter_by(id=session['userid']).first()
-    
+    # current_user = db.session.query(User).filter_by(id=session['userid']).first()
+    currentuser = get_currentuser()
+
     # load user to follow
     follow_user = db.session.query(User).filter_by(id=followed_id).first()
     
     # append follow
-    u = current_user.follow(follow_user)
+    u = currentuser.follow(follow_user)
 
     db.session.add(u)
     db.session.commit()
@@ -234,12 +230,13 @@ def follow(followed_id):
 def unfollow(followed_id):
     
     # load current user
-    current_user = db.session.query(User).filter_by(id=session['userid']).first()
-    
+    # current_user = db.session.query(User).filter_by(id=session['userid']).first()
+    currentuser = get_currentuser()
+
     # load user to unfollow
     follow_user = db.session.query(User).filter_by(id=followed_id).first()
     
-    u = current_user.unfollow(follow_user)
+    u = currentuser.unfollow(follow_user)
 
     db.session.add(u)
     db.session.commit()
@@ -252,15 +249,15 @@ def uploads(filename):
     
 @app.route('/settings')
 def settings():
-    username = get_currentusername()
+    currentuser = get_currentuser()
     tag_list = get_tags()
     
     user = db.session.query(User).filter_by(id=session['userid']).first()
-    return render_template("settings.html", username=username, user=user, tag_list=tag_list) #generates html based on template
+    return render_template("settings.html", currentuser=currentuser, tag_list=tag_list) #generates html based on template
 
-def get_currentusername():
-    if 'username' in session:
-        user=session['username']
+def get_currentuser():
+    if 'userid' in session:
+        user = db.session.query(User).filter_by(id=session['userid']).first()
     else:
         user=None
     return user
