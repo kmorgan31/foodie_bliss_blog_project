@@ -44,17 +44,6 @@ class Post(db.Model):
         for tagid in tags:
             tag = db.session.query(Tag).filter_by(id=tagid).first()
             self.categories.append(tag)
-
-    @property
-    def serialize(self):
-    #   Return object data in easily serializeable format
-        return {
-           'id'         : self.id,
-           'title'      : self.title,
-           'content'    : self.content,
-           'created_by' : self.created_by,
-           'created_at' : self.created_at
-        }
         
        
 class Tag(db.Model):
@@ -121,15 +110,6 @@ class User(db.Model):
         self.gplus_url = ""
         self.fbk_url = ""
 
-    @property
-    def serialize(self):
-    #   Return object data in easily serializeable format
-        return {
-           'id'         : self.id,
-           'username'   : self.username,
-           'email'      : self.email,
-           'password'   : self.password,
-        }
     
     def __repr__(self):
         return "User " + self.username

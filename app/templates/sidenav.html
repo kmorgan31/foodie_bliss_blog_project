@@ -7,7 +7,7 @@
                 <ul class="dropdown-menu">
                     <li><a id="0" class="filter-category">View All</a></li>
                       {% for tag in tag_list %}
-                        <li><a href="{{ tag.id }}" class="filter-category">{{ tag.name }}</a></li>
+                        <li><a id="{{ tag.id }}" class="filter-category">{{ tag.name }}</a></li>
                       {% endfor %}
                 </ul>
             </li>
@@ -39,6 +39,7 @@
            data: {"category_id": category_id},
            success: function(data){
                $("#post_list").html(data.result);
+               $("#filter").html(data.filter);
            }
        })
     });

@@ -6,6 +6,13 @@
     
     {% else %}
 
+      {% if filter!="" %}
+      <div class="text-right">
+          <span class="desc">Filter: <span id="filter" class="label label-primary">{{ filter }}</span></span>
+      </div>
+      <br>
+      {% endif %}
+
       {% for post in post_list %}
       <div name="post_{{post[0].id}}" id="{{post[0].id}}"  class="bs-callout bs-callout-danger col-sm-12">
 
@@ -24,6 +31,12 @@
               <a class="post-link" href="{{url_for('edit_post', postid=post[0].id) }}"><span class="glyphicon glyphicon-pencil"></span></a>
               <a class="post-link remove-post" data-toggle="modal" data-target="#delete_confirm_modal" id="{{ post[0].id }}"><span class="glyphicon glyphicon-remove"></span></a>
             {% endif %}
+          </div>
+
+          <div class="col-sm-12">
+            {% for tag in post[0].get_post_tags() %}
+                <span class="label label-primary">{{ tag.name }}</span>
+            {% endfor %}
           </div>
           
           <div class="col-sm-12">

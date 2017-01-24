@@ -4,7 +4,7 @@ from app.models import Post, User, Comment, Tag, followers, tags_relationship
 import os
 from flask import Flask
 from flask import render_template #allow use of html templates
-from flask import request, redirect, url_for, session, send_from_directory
+from flask import request, redirect, url_for, session, send_from_directory, jsonify
 from werkzeug.utils import secure_filename
 
 
@@ -19,15 +19,16 @@ def index():
         category_id = int(request.args.get('category_id').encode('UTF8'))
         
         if(category_id!=0):
-            results = db.session.query(Post, User).join(User).filter(Post.created_by==User.id) \
+            post_list = db.session.query(Post, User).join(User).filter(Post.created_by==User.id) \
                         .filter(Post.categories.any(Tag.id == category_id)) \
                         .order_by(Post.created_at.desc()).all()
-        
-            post_list = [(x.serialize,y.serialize) for (x,y) in results]
+            tag_name = db.session.query(Tag).filter_by(id=category_id).first().name
+
         else:
             post_list = db.session.query(Post, User).join(User).filter(Post.created_by==User.id).order_by(Post.created_at.desc()).all()
+            tag_name = ""            
             
-        return jsonify({'result': render_template('postlist.html', post_list=post_list)})
+        return jsonify({'result': render_template('postlist.html', post_list=post_list), 'filter': tag_name})
         
     else:
         #get all posts
@@ -38,7 +39,7 @@ def index():
         else:
             user_list = []
         
-        return render_template("index.html", currentuser=currentuser, post_list=post_list, user_list=user_list,tag_list=tag_list) #generates html based on template
+        return render_template("index.html", currentuser=currentuser, post_list=post_list, user_list=user_list,tag_list=tag_list, filter="") #generates html based on template
 
 
 @app.route('/about')
