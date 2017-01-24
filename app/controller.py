@@ -1,5 +1,5 @@
 from app import app, db
-from app.models import Post, User, Comment
+from app.models import Post, User, Comment, Tag, followers, tags_relationship
 
 import os
 from flask import Flask
@@ -17,7 +17,12 @@ def index():
     #get all posts
     post_list = db.session.query(Post, User).join(User).filter(Post.created_by==User.id).order_by(Post.created_at.desc()).all()
     
-    return render_template("index.html", currentuser=currentuser, post_list=post_list, tag_list=tag_list) #generates html based on template
+    if(currentuser):
+            user_list = db.session.query(User).join(followers, (followers.c.followed_id == User.id)).filter(followers.c.follower_id == currentuser.id).all()
+        else:
+            user_list = []
+
+    return render_template("index.html", currentuser=currentuser, post_list=post_list, user_list=user_list, tag_list=tag_list) #generates html based on template
 
 @app.route('/about')
 def about():
@@ -223,7 +228,6 @@ def follow(followed_id):
 
     db.session.add(u)
     db.session.commit()
-    flash('Following!')
     return redirect(url_for('profile', userid=followed_id))
 
 @app.route('/unfollow/<int:followed_id>')
@@ -240,7 +244,6 @@ def unfollow(followed_id):
 
     db.session.add(u)
     db.session.commit()
-    flash('Unfollowing!')
     return redirect(url_for('profile', userid=followed_id))
 
 @app.route('/uploads/<filename>')

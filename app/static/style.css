@@ -183,7 +183,8 @@ footer {
 }
 
 .settings {
-    color: #EB008A;    
+    color: #EB008A;
+    padding-top:10px;    
     text-align: right;
     font-family: 'Josefin Sans', sans-serif;
 }

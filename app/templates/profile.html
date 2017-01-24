@@ -35,7 +35,7 @@
 
         <div class="info col-sm-8">
             <div class="title">{{user.username}}</div>
-            <div class="desc" style="min-height:70px;">{{user.bio}}</div>
+            <div class="desc" style="min-height:70px;">{{user.bio|safe}}</div>
         </div>
         
         <div class="col-sm-2 settings">
