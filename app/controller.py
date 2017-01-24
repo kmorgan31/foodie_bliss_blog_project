@@ -14,15 +14,32 @@ def index():
     set_session_path("/")
     tag_list = get_tags()
 
-    #get all posts
-    post_list = db.session.query(Post, User).join(User).filter(Post.created_by==User.id).order_by(Post.created_at.desc()).all()
-    
-    if(currentuser):
-        user_list = db.session.query(User).join(followers, (followers.c.followed_id == User.id)).filter(followers.c.follower_id == currentuser.id).all()
+     #if filtered
+    if(request.args.get('category_id')):
+        category_id = int(request.args.get('category_id').encode('UTF8'))
+        
+        if(category_id!=0):
+            results = db.session.query(Post, User).join(User).filter(Post.created_by==User.id) \
+                        .filter(Post.categories.any(Tag.id == category_id)) \
+                        .order_by(Post.created_at.desc()).all()
+        
+            post_list = [(x.serialize,y.serialize) for (x,y) in results]
+        else:
+            post_list = db.session.query(Post, User).join(User).filter(Post.created_by==User.id).order_by(Post.created_at.desc()).all()
+            
+        return jsonify({'result': render_template('postlist.html', post_list=post_list)})
+        
     else:
-        user_list = []
+        #get all posts
+        post_list = db.session.query(Post, User).join(User).filter(Post.created_by==User.id).order_by(Post.created_at.desc()).all()
 
-    return render_template("index.html", currentuser=currentuser, post_list=post_list, user_list=user_list, tag_list=tag_list) #generates html based on template
+        if(currentuser):
+            user_list = db.session.query(User).join(followers, (followers.c.followed_id == User.id)).filter(followers.c.follower_id == currentuser.id).all()
+        else:
+            user_list = []
+        
+        return render_template("index.html", currentuser=currentuser, post_list=post_list, user_list=user_list,tag_list=tag_list) #generates html based on template
+
 
 @app.route('/about')
 def about():

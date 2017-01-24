@@ -159,9 +159,10 @@ hr {
 .social-btns{ border-radius: 50%; width:32px; height:32px; line-height:18px;  }
 
 footer {
-    /*position:absolute;*/
+    position:absolute;
     padding-top:30px;
     width:100%;
+    height:60px;
     bottom:0px;
 }
 
