@@ -169,7 +169,7 @@ def edit_profile():
         user.img_path = filename
     
     db.session.commit() #save database
-    return redirect(url_for('profile'))
+    return redirect(url_for('profile', username=user.username))
     
         
 @app.route('/post/<int:postid>')
@@ -186,27 +186,52 @@ def post(postid):
     selected_tag_list = post[0].get_post_tags() 
     return render_template("post.html", currentuser=currentuser, post=post, comment_list=comment_list, tag_list=tag_list, selected_tag_list=selected_tag_list) #generates html based on template
 
-
-@app.route('/profile')
-@app.route('/profile/<int:userid>')
-def profile(userid=None):
-    set_session_path("/profile")
+@app.route('/profile/<username>/following')
+def get_profile_following(username):
     currentuser = get_currentuser()
     tag_list = get_tags()
     
-    if(userid==None): #current user's profile selected
-        userid = session['userid']
+#get selected user
+    selected_user = db.session.query(User).filter_by(username=username).first()
+
+    #get following users
+    user_list = db.session.query(User).join(followers, (followers.c.followed_id == User.id)).filter(followers.c.follower_id == selected_user.id).all()
+    
+    return render_template("userlist.html", currentuser=currentuser, selected_suer=selected_user, user_list=user_list, tag_list=tag_list, source="Following")
+    
+    
+@app.route('/profile/<username>/followers')
+def get_profile_followers(username):
+    currentuser = get_currentuser()
+    tag_list = get_tags()
+
+    #get selected user
+    selected_user = db.session.query(User).filter_by(username=username).first()
+    
+    #get followers
+    user_list = db.session.query(User).join(followers, (followers.c.follower_id == User.id)).filter(followers.c.followed_id == selected_user.id).all()
+    
+    return render_template("userlist.html", currentuser=currentuser, selected_user=selected_user, user_list=user_list, tag_list=tag_list, source="Followers")
+
+@app.route('/profile/<username>')
+def profile(userid=None):
+    set_session_path("/profile/"+username)
+    currentuser = get_currentuser()
+    tag_list = get_tags()
+    
+    if(username==None): 
+        #current user's profile selected
         user = currentuser
     else:
         # load user of selected user
-        user = db.session.query(User).filter_by(id=userid).first()
+        user = db.session.query(User).filter_by(username=username).first()
 
     #get posts and comments by current user
-    post_list = db.session.query(Post, User).filter_by(created_by=userid).join(User).filter(Post.created_by==User.id).order_by(Post.created_at.desc()).all()
-    comment_list = db.session.query(Comment, Post, User).filter_by(created_by=userid).join(Post).filter(Comment.post_id==Post.id).join(User).filter(Post.created_by==User.id).order_by(Comment.created_at.desc()).all()
+    post_list = db.session.query(Post, User).filter_by(created_by=user.id).join(User).filter(Post.created_by==User.id).order_by(Post.created_at.desc()).all()
+    comment_list = db.session.query(Comment, Post, User).filter_by(created_by=user.id).join(Post).filter(Comment.post_id==Post.id).join(User).filter(Post.created_by==User.id).order_by(Comment.created_at.desc()).all()
 
     #check if currentuser following selected user
-    isFollowing = db.session.query(followers).filter_by(follower_id=session['userid'], followed_id=userid).first() > 0
+    isFollowing = db.session.query(followers).filter_by(follower_id=currentuser.id, followed_id=user.id).first() > 0
     
     #check number following
     numFollowing = db.session.query(followers).filter_by(follower_id=user.id).count()
@@ -228,7 +253,7 @@ def follow(followed_id):
 
     db.session.add(u)
     db.session.commit()
-    return redirect(url_for('profile', userid=followed_id))
+    return redirect(session['path'])
 
 @app.route('/unfollow/<int:followed_id>')
 def unfollow(followed_id):
@@ -244,7 +269,7 @@ def unfollow(followed_id):
 
     db.session.add(u)
     db.session.commit()
-    return redirect(url_for('profile', userid=followed_id))
+    return redirect(session['path'])
 
 @app.route('/uploads/<filename>')
 def uploads(filename):
@@ -255,7 +280,6 @@ def settings():
     currentuser = get_currentuser()
     tag_list = get_tags()
     
-    user = db.session.query(User).filter_by(id=session['userid']).first()
     return render_template("settings.html", currentuser=currentuser, tag_list=tag_list) #generates html based on template
 
 def get_currentuser():
