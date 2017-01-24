@@ -18,9 +18,9 @@ def index():
     post_list = db.session.query(Post, User).join(User).filter(Post.created_by==User.id).order_by(Post.created_at.desc()).all()
     
     if(currentuser):
-            user_list = db.session.query(User).join(followers, (followers.c.followed_id == User.id)).filter(followers.c.follower_id == currentuser.id).all()
-        else:
-            user_list = []
+        user_list = db.session.query(User).join(followers, (followers.c.followed_id == User.id)).filter(followers.c.follower_id == currentuser.id).all()
+    else:
+        user_list = []
 
     return render_template("index.html", currentuser=currentuser, post_list=post_list, user_list=user_list, tag_list=tag_list) #generates html based on template
 
@@ -197,7 +197,7 @@ def get_profile_following(username):
     #get following users
     user_list = db.session.query(User).join(followers, (followers.c.followed_id == User.id)).filter(followers.c.follower_id == selected_user.id).all()
     
-    return render_template("userlist.html", currentuser=currentuser, selected_suer=selected_user, user_list=user_list, tag_list=tag_list, source="Following")
+    return render_template("userlist.html", currentuser=currentuser, selected_user=selected_user, user_list=user_list, tag_list=tag_list, source="Following")
     
     
 @app.route('/profile/<username>/followers')
@@ -214,7 +214,7 @@ def get_profile_followers(username):
     return render_template("userlist.html", currentuser=currentuser, selected_user=selected_user, user_list=user_list, tag_list=tag_list, source="Followers")
 
 @app.route('/profile/<username>')
-def profile(userid=None):
+def profile(username):
     set_session_path("/profile/"+username)
     currentuser = get_currentuser()
     tag_list = get_tags()

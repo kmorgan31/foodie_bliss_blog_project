@@ -8,3 +8,4 @@ categories = ["Chinese", "Indian", "Japanese", "Italian", "Caribbean"]
 for category in categories:
     tag = Tag(category)
     db.session.add(tag)
+db.session.commit()

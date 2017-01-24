@@ -10,7 +10,7 @@
       <div name="comment_{{comment[0].id}}" id="{{comment[0].id}}"  class="bs-callout bs-callout-danger col-sm-12">
           <div class="col-xs-10 post_title" style="display:inline;">
             <a href="{{url_for('post', postid=comment[0].post_id) }}">{{comment[1].title}}</a> &nbsp;
-            <span class="desc">by <a class="post-author-link" href="{{url_for('profile', userid=comment[2].id) }}">{{comment[2].username}}</a></span>
+            <span class="desc">by <a class="post-author-link" href="{{url_for('profile', username=comment[2].username) }}">{{comment[2].username}}</a></span>
           </div>
           
           <div class="col-xs-2 text-right">

@@ -13,7 +13,7 @@
             <h4 style="display:inline;"><a class="post-link" href="{{url_for('post', postid=post[0].id) }}">{{post[0].title}}</a> &nbsp;</h4>
             
             {% if session['path'] != '/profile' %}
-              <span class="desc">by <a class="post-author-link" href="{{url_for('profile', userid=post[0].created_by) }}">{{post[1].username}}</a></span>
+              <span class="desc">by <a class="post-author-link" href="{{url_for('profile', username=post[1].username) }}">{{post[1].username}}</a></span>
             {% endif %}
             
           </div>
