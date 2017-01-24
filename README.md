@@ -13,6 +13,7 @@ Technologies used:
 
 Current Features:
 - User management - Add New, Edit Profile
+- User Validation (Signup and Login)
 - Post management - Add, Edit, Delete
 - Comment management - Add
 - Subscriptions
@@ -24,7 +25,8 @@ Features to Implement:
 - Filter Posts by Category
 - Filter Posts by Hot, Trending
 - Filter Posts by User
-- User Validation (Signup and Login)
+- User Verification against DB
+
 
 Optional Features:
 - Comments - Edit, Delete
