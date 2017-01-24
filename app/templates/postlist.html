@@ -6,7 +6,7 @@
     
     {% else %}
 
-      {% if filter!="" %}
+      {% if filter!="" and session['path'] == '/' %}
       <div class="text-right">
           <span class="desc">Filter: <span id="filter" class="label label-primary">{{ filter }}</span></span>
       </div>
