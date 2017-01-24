@@ -13,7 +13,7 @@ Technologies used:
 
 Current Features:
 - User management - Add New, Edit Profile
-- - Subscribe
+  - Subscribe
 - Post management - Add, Edit, Delete
 - Comment management - Add, Delete
 - View Followed on HomePage
@@ -27,8 +27,9 @@ Features to Implement:
 - User Validation (Signup and Login)
 
 Setup:
-1. pip install -r requirements.txt
-2. Start postgresql service with username postgres password password
-3. Within psql, CREATE DATABASE foodieblissblog
-4. Run python create_database.py
-5. Run python run.py
+
+1.  pip install -r requirements.txt
+2.  Start postgresql service with username postgres password password
+3.  Within psql, CREATE DATABASE foodieblissblog
+4.  Run python create_database.py
+5.  Run python run.py
