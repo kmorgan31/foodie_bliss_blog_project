@@ -1,17 +1,19 @@
 <div class="infinite-scroll">
+    
+    <div class="text-right">
+      {% if filter!="" and session['path'] == '/' %}
+        <span class="desc">Filter: </span>
+        <span class="label label-primary">{{ filter }}</span>
+      {% endif %}
+    </div>
+    <br>
+
     {% if post_list|length == 0 %}
       <div class="container-fluid text-center">
         <p>No posts, huh...</p>
       </div>
     
     {% else %}
-
-      {% if filter!="" and session['path'] == '/' %}
-      <div class="text-right">
-          <span class="desc">Filter: <span id="filter" class="label label-primary">{{ filter }}</span></span>
-      </div>
-      <br>
-      {% endif %}
 
       {% for post in post_list %}
       <div name="post_{{post[0].id}}" id="{{post[0].id}}"  class="bs-callout bs-callout-danger col-sm-12">

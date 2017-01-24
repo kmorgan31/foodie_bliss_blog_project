@@ -28,7 +28,7 @@ def index():
             post_list = db.session.query(Post, User).join(User).filter(Post.created_by==User.id).order_by(Post.created_at.desc()).all()
             tag_name = ""            
             
-        return jsonify({'result': render_template('postlist.html', post_list=post_list), 'filter': tag_name})
+        return jsonify({'result': render_template('postlist.html', post_list=post_list, filter=tag_name)})
         
     else:
         #get all posts
@@ -254,7 +254,7 @@ def profile(username):
     #check number following
     numFollowing = db.session.query(followers).filter_by(follower_id=user.id).count()
     
-    return render_template("profile.html", currentuser=currentuser, user=user, post_list=post_list, comment_list=comment_list, isFollowing=isFollowing, numFollowing=numFollowing, tag_list=tag_list) #generates html based on template
+    return render_template("profile.html", currentuser=currentuser, user=user, post_list=post_list, comment_list=comment_list, isFollowing=isFollowing, numFollowing=numFollowing, tag_list=tag_list, filter="") #generates html based on template
 
 @app.route('/follow/<int:followed_id>')
 def follow(followed_id):
