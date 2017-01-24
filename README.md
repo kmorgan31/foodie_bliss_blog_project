@@ -13,11 +13,11 @@ Technologies used:
 
 Current Features:
 - User management - Add New, Edit Profile
-  - Subscribe
 - Post management - Add, Edit, Delete
-- Comment management - Add, Delete
-- View Followed on HomePage
-- View Followers, Followed from Profile
+- Comment management - Add
+- Subscriptions
+  - View Followed on HomePage
+  - View Followers, Followed from Profile
 
 Features to Implement:
 - Search Posts by Post title, category
@@ -25,6 +25,9 @@ Features to Implement:
 - Filter Posts by Hot, Trending
 - Filter Posts by User
 - User Validation (Signup and Login)
+
+Optional Features:
+- Comments - Edit, Delete
 
 Setup:
 
