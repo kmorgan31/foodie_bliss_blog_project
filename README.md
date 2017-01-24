@@ -17,13 +17,13 @@ Current Features:
 - Post management - Add, Edit, Delete
 - Comment management - Add, Delete
 - View Followed on HomePage
+- View Followers, Followed from Profile
 
 Features to Implement:
 - Search Posts by Post title, category
 - Filter Posts by Category
 - Filter Posts by Hot, Trending
 - Filter Posts by User
-- View Followers, Followed from Profile
 - User Validation (Signup and Login)
 
 Setup:
