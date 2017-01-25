@@ -165,7 +165,8 @@ def edit_post(postid=None):
     else:
         selected_tag_names = [x.name.encode('UTF8') for x in post.get_post_tags()]
         return render_template("edit_post.html", currentuser=currentuser, post=post, tag_list=tag_list, selected_tag_names=selected_tag_names) #generates html based on template
-        
+     
+
 @app.route('/edit_profile', methods=['POST'])        
 def edit_profile():
     userid = request.form['user_id']
@@ -204,6 +205,7 @@ def post(postid):
     selected_tag_list = post[0].get_post_tags() 
     return render_template("post.html", currentuser=currentuser, post=post, comment_list=comment_list, tag_list=tag_list, selected_tag_list=selected_tag_list) #generates html based on template
 
+
 @app.route('/profile/<username>/following')
 def get_profile_following(username):
     currentuser = get_currentuser()
@@ -237,7 +239,7 @@ def profile(username):
     currentuser = get_currentuser()
     tag_list = get_tags()
     
-    if(username==None): 
+    if(username==currentuser.username): 
         #current user's profile selected
         user = currentuser
     else:
@@ -288,6 +290,22 @@ def unfollow(followed_id):
     db.session.add(u)
     db.session.commit()
     return redirect(session['path'])
+
+@app.route('/search', methods=['POST'])
+def search():
+    set_session_path("/search")
+    currentuser = get_currentuser()
+    tag_list = get_tags()
+    
+    query_string = request.form['query'].encode('UTF8')
+
+    #get posts which contain query
+    if(query_string!=""):
+        post_list = db.session.query(Post, User).filter(Post.title.ilike('%{0}%'.format(query_string))).join(User).filter(Post.created_by==User.id).order_by(Post.created_at.desc()).all()
+    else:
+        post_list = db.session.query(Post, User).join(User).filter(Post.created_by==User.id).order_by(Post.created_at.desc()).all()
+    
+    return render_template("search.html", currentuser=currentuser, post_list=post_list, tag_list=tag_list, query_string=query_string) #generates html based on template
 
 @app.route('/uploads/<filename>')
 def uploads(filename):
