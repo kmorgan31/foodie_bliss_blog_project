@@ -17,16 +17,21 @@ Current Features:
 - Post management - Add, Edit, Delete
 - Comment management - Add
 - Subscriptions
-  - View Followed on HomePage
-  - View Followers, Followed from Profile
-- Filter Posts by: 
+  - Follow/Unfollow Users
+    - View Followed on HomePage
+    - View Followers, Followed from Profile
+  - Favourite/Unfavourite Posts
+- Filter Posts on HomePage by: 
   - Category
   - Subscribed Users
+  - Favourited
+  
 - Search Posts by: 
   - Title
 
 Features to Implement:
 - Filter Posts by Hot, Trending
+- View Favourited/Saved Posts from Profile
 - User Verification against DB
 
 Optional Features:
