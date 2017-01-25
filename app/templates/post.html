@@ -24,9 +24,11 @@
                {% else %}
                   
                       {% if not post[0].has_favourited(currentuser) %}
-                          <a class="settings" href="{{ url_for('favourite', postid=post[0].id) }}"><span class="glyphicon glyphicon-heart-empty" style="color:#737373;"></span></a>
+                          <!--<a class="settings" href="{{ url_for('favourite', postid=post[0].id) }}"><span class="glyphicon glyphicon-heart-empty" style="color:#737373;"></span></a>-->
+                          <a class="settings" id="favourite_link" onClick="favourite({{post[0].id}})"><span class="glyphicon glyphicon-heart-empty" style="color:#737373;"></span></a>
                       {% else %}
-                          <a class="settings" href="{{ url_for('unfavourite', postid=post[0].id) }}"><span class="glyphicon glyphicon-heart"></span></a>
+                          <!--<a class="settings" href="{{ url_for('unfavourite', postid=post[0].id) }}"><span class="glyphicon glyphicon-heart"></span></a>-->
+                          <a class="settings" id="favourite_link" onClick="unfavourite({{post[0].id}})"><span class="glyphicon glyphicon-heart"></span></a>
                       {% endif %}
                       
                   {% endif %}
@@ -116,4 +118,30 @@
         </div>
     </div>
 </div>
+
+<script>
+    var favourite = function(post_id) {
+         $.ajax({
+          type: "GET",
+          url: "/favourite/"+post_id.toString(),
+          success: function(data){
+              $("#favourite_link span").attr("class", "glyphicon glyphicon-heart")
+                                       .attr("style", "color:#EB008A;");
+              $("#favourite_link").attr("onClick", "unfavourite("+post_id.toString()+")");
+          }
+        })
+    };
+    
+    var unfavourite = function(post_id) {
+         $.ajax({
+          type: "GET",
+          url: "/unfavourite/"+post_id.toString(),
+          success: function(data){
+              $("#favourite_link span").attr("class", "glyphicon glyphicon-heart-empty")
+                                       .attr("style", "color:#737373;");
+              $("#favourite_link").attr("onClick", "favourite("+post_id.toString()+")");
+          }
+        })
+    };
+</script>
 {% endblock %}

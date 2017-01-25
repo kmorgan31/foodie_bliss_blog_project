@@ -21,10 +21,16 @@ def index():
         q = db.session.query(Post, User).join(User).filter(Post.created_by==User.id)
         
         if(filter_by=="Subscribed"):
-            q = q.join(followers, (followers.c.followed_id == User.id)).filter(followers.c.follower_id == currentuser.id)
-            
+            # q = q.join(followers, (followers.c.followed_id == User.id)).filter(followers.c.follower_id == currentuser.id)
+            q = q.filter(User.followed.any(User.id == currentuser.id))
+
         elif(filter_by=="Favourited"):
-            q = q.join(favourites_relationship, (favourites_relationship.c.post_id == Post.id)).filter(favourites_relationship.c.user_id == currentuser.id)
+            # q = q.join(favourites_relationship, (favourites_relationship.c.post_id == Post.id)).filter(favourites_relationship.c.user_id == currentuser.id)
+            q = q.filter(Post.favourites.any(User.id == currentuser.id))
+         
+        elif(filter_by=="Hot"):
+            q = q.join(favourites_relationship, (favourites_relationship.c.post_id == Post.id)).filter(favourites_relationship.count()>20)
+            # q = q.filter(Post.favourites.any(count()>0))
 
         elif(filter_by!="None"): #category
             q = q.filter(Post.categories.any(Tag.name == filter_by))
@@ -63,7 +69,9 @@ def signup():
         user = db.session.query(User).filter_by(username=request.form['username']).first()
         
         if(user):
-            return redirect(url_for("login"))
+            # return redirect(url_for("login"))
+            return render_template("login.html", currentuser=currentuser, tag_list=tag_list, error="Username already exists") #generates html based on template
+
         else:
             user = User(request.form['username'], request.form['email'], request.form['password']) #create User object from html fields
             db.session.add(user) #add to database
@@ -86,14 +94,17 @@ def login():
     
     if request.method == 'POST':
         user = db.session.query(User).filter_by(username=request.form['username'], password=request.form['password']).first()
-        if (user):
+        
+        if (user==None):
+            return render_template("login.html", currentuser=currentuser, tag_list=tag_list, error="Login incorrect.") #generates html based on template
+        
+        else:
             session['username'] = request.form['username']
             session['userid'] = user.id
             return redirect(url_for("index"))
-        else:
-            return redirect(url_for("login"))
+
     else:
-        return render_template("login.html", currentuser=currentuser, tag_list=tag_list) #generates html based on template
+        return render_template("login.html", currentuser=currentuser, tag_list=tag_list, error="") #generates html based on template
         
         
 @app.route('/logout')
@@ -207,7 +218,7 @@ def post(postid):
 
     return render_template("post.html", currentuser=currentuser, post=post, comment_list=comment_list, tag_list=tag_list) #generates html based on template
 
-@app.route('/favourite/<int:postid>')
+@app.route('/favourite/<postid>')
 def favourite(postid):
     
     # load current user
@@ -221,9 +232,10 @@ def favourite(postid):
 
     db.session.add(u)
     db.session.commit()
-    return redirect(url_for('post', postid=postid))
+    return "True"
+    # return redirect(url_for('post', postid=postid))
 
-@app.route('/unfavourite/<int:postid>')
+@app.route('/unfavourite/<postid>')
 def unfavourite(postid):
     
     # load current user
@@ -236,7 +248,8 @@ def unfavourite(postid):
 
     db.session.add(u)
     db.session.commit()
-    return redirect(url_for('post', postid=postid))
+    return "True"
+    # return redirect(url_for('post', postid=postid))
 
 @app.route('/profile/<username>/following')
 def get_profile_following(username):
@@ -284,7 +297,7 @@ def profile(username):
 
     return render_template("profile.html", currentuser=currentuser, user=user, post_list=post_list, comment_list=comment_list, tag_list=tag_list) #generates html based on template
 
-@app.route('/follow/<int:followed_id>')
+@app.route('/follow/<followed_id>')
 def follow(followed_id):
     
     # load current user
@@ -299,9 +312,10 @@ def follow(followed_id):
 
     db.session.add(u)
     db.session.commit()
-    return redirect(session['path'])
+    return "True"
+    # return redirect(session['path'])
 
-@app.route('/unfollow/<int:followed_id>')
+@app.route('/unfollow/<followed_id>')
 def unfollow(followed_id):
     
     # load current user
@@ -315,7 +329,8 @@ def unfollow(followed_id):
 
     db.session.add(u)
     db.session.commit()
-    return redirect(session['path'])
+    return "True"
+    # return redirect(session['path'])
 
 @app.route('/search', methods=['POST'])
 def search():
