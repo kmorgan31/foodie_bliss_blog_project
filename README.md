@@ -21,15 +21,17 @@ Current Features:
   - View Followers, Followed from Profile
 - Filter Posts by: 
   - Category
+  - Subscribed Users
+- Search Posts by: 
+  - Title
 
 Features to Implement:
-- Search Posts by Post title, category
 - Filter Posts by Hot, Trending
-- Filter Posts by Subscribed User
 - User Verification against DB
 
 Optional Features:
 - Comments - Edit, Delete
+- Search Posts by Category
 
 
 Setup:
