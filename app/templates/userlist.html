@@ -22,13 +22,13 @@
           </div>
           
           <div class="col-xs-10">
-            <h4 style="display:inline;"><a class="post-link" href="{{url_for('profile', username=user.username) }}">{{ user.username }}</a> &nbsp;</h4>
+            <h4 style="display:inline;"><a class="post-link" href="{{url_for('profile', username=user.username) }}">{{ user.username }}</a>&nbsp;</h4>
           </div>
           
           <div class="col-xs-1 text-right">
             <!-- <span class="desc"> numPosts </span> -->
             
-            {% if currentuser!=user %}
+            {% if currentuser!=None and currentuser!=user %}
                 <span> | </span>                
                 {% if not currentuser.is_following(user) %}
                       <a class="settings" href="{{ url_for('follow', followed_id=user.id) }}"><span class="glyphicon glyphicon-heart-empty"></span></a>
@@ -44,4 +44,3 @@
 </div>
 
 {% endblock %}
-

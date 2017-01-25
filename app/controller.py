@@ -1,5 +1,5 @@
 from app import app, db
-from app.models import Post, User, Comment, Tag, followers, tags_relationship
+from app.models import Post, User, Comment, Tag, followers, tags_relationship, favourites_relationship
 
 import os
 from flask import Flask
@@ -23,12 +23,15 @@ def index():
         if(filter_by=="Subscribed"):
             q = q.join(followers, (followers.c.followed_id == User.id)).filter(followers.c.follower_id == currentuser.id)
             
+        elif(filter_by=="Favourited"):
+            q = q.join(favourites_relationship, (favourites_relationship.c.post_id == Post.id)).filter(favourites_relationship.c.user_id == currentuser.id)
+
         elif(filter_by!="None"): #category
             q = q.filter(Post.categories.any(Tag.name == filter_by))
         
         post_list = q.order_by(Post.created_at.desc()).all()
         
-        return jsonify({'result': render_template('postlist.html', post_list=post_list, filter_by=filter_by)})
+        return jsonify({'result': render_template('postlist.html', currentuser=currentuser, post_list=post_list, filter_by=filter_by)})
        
     else:
         #get all posts
@@ -196,22 +199,51 @@ def post(postid):
     currentuser = get_currentuser()
     tag_list = get_tags()
 
+    #get selected post
     post = db.session.query(Post, User).filter_by(id=postid).join(User).filter(Post.created_by==User.id).first()
 
     #get comments associated with post
     comment_list = db.session.query(Comment, User).filter_by(post_id=postid).join(User).filter(Comment.created_by==User.id).order_by(Comment.created_at.desc()).all()
 
-    #get associated tags
-    selected_tag_list = post[0].get_post_tags() 
-    return render_template("post.html", currentuser=currentuser, post=post, comment_list=comment_list, tag_list=tag_list, selected_tag_list=selected_tag_list) #generates html based on template
+    return render_template("post.html", currentuser=currentuser, post=post, comment_list=comment_list, tag_list=tag_list) #generates html based on template
 
+@app.route('/favourite/<int:postid>')
+def favourite(postid):
+    
+    # load current user
+    currentuser = get_currentuser()
+
+    # load post to favourite
+    post = db.session.query(Post).filter_by(id=postid).first()
+    
+    # append follow
+    u = post.favourite(currentuser)
+
+    db.session.add(u)
+    db.session.commit()
+    return redirect(url_for('post', postid=postid))
+
+@app.route('/unfavourite/<int:postid>')
+def unfavourite(postid):
+    
+    # load current user
+    currentuser = get_currentuser()
+    
+    # load post to favourite
+    post = db.session.query(Post).filter_by(id=postid).first()
+
+    u = post.unfavourite(currentuser)
+
+    db.session.add(u)
+    db.session.commit()
+    return redirect(url_for('post', postid=postid))
 
 @app.route('/profile/<username>/following')
 def get_profile_following(username):
     currentuser = get_currentuser()
     tag_list = get_tags()
     
-#get selected user
+    #get selected user
     selected_user = db.session.query(User).filter_by(username=username).first()
 
     #get following users
@@ -250,13 +282,7 @@ def profile(username):
     post_list = db.session.query(Post, User).filter_by(created_by=user.id).join(User).filter(Post.created_by==User.id).order_by(Post.created_at.desc()).all()
     comment_list = db.session.query(Comment, Post, User).filter_by(created_by=user.id).join(Post).filter(Comment.post_id==Post.id).join(User).filter(Post.created_by==User.id).order_by(Comment.created_at.desc()).all()
 
-    #check if currentuser following selected user
-    isFollowing = db.session.query(followers).filter_by(follower_id=currentuser.id, followed_id=user.id).first() > 0
-    
-    #check number following
-    numFollowing = db.session.query(followers).filter_by(follower_id=user.id).count()
-    
-    return render_template("profile.html", currentuser=currentuser, user=user, post_list=post_list, comment_list=comment_list, isFollowing=isFollowing, numFollowing=numFollowing, tag_list=tag_list, filter="") #generates html based on template
+    return render_template("profile.html", currentuser=currentuser, user=user, post_list=post_list, comment_list=comment_list, tag_list=tag_list) #generates html based on template
 
 @app.route('/follow/<int:followed_id>')
 def follow(followed_id):

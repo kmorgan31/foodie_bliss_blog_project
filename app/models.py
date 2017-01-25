@@ -8,6 +8,12 @@ tags_relationship = db.Table('tags_relationship',
     db.PrimaryKeyConstraint('post_id', 'tag_id')
 )
 
+favourites_relationship = db.Table('favourites_relationship',
+    db.Column('user_id', db.Integer, db.ForeignKey('User.id'), nullable=False),
+    db.Column('post_id', db.Integer, db.ForeignKey('Post.id'), nullable=False),
+    db.PrimaryKeyConstraint('post_id', 'user_id')
+)
+
 class Post(db.Model):
     __tablename__ = "Post"
     id = db.Column(db.Integer, primary_key=True)
@@ -19,7 +25,9 @@ class Post(db.Model):
     
     categories = db.relationship('Tag', secondary=tags_relationship, backref='Post', lazy='dynamic')
     comments = db.relationship('Comment', cascade='all,delete', backref='Post', lazy='dynamic')
+    favourites = db.relationship('User', secondary=favourites_relationship, backref='Post', lazy='dynamic')
 
+    #Tags
     def add_tag(self, tag):
         if not self.is_tagged(tag):
             self.categories.append(tag)
@@ -36,6 +44,27 @@ class Post(db.Model):
     def get_post_tags(self):
         return db.session.query(Tag.name).join(tags_relationship, (tags_relationship.c.tag_id == Tag.id)).filter(tags_relationship.c.post_id == self.id).all()
 
+     #Favourites
+    def favourite(self, user):
+        if not self.has_favourited(user):
+            self.favourites.append(user)
+            return self
+
+    def unfavourite(self, user):
+        if self.has_favourited(user):
+            self.favourites.remove(user)
+            return self
+    
+    def has_favourited(self, user):
+        return self.favourites.filter(favourites_relationship.c.user_id == user.id).count() > 0
+    
+    def get_favourites_users(self):
+        return db.session.query(User).join(favourites_relationship, (favourites_relationship.c.user_id == User.id)).filter(favourites_relationship.c.post_id == self.id).all()
+    
+    def num_favourites(self):
+        return self.favourites.filter(favourites_relationship.c.post_id == self.id).count()
+    
+    #init
     def __init__(self,title,content,user_id,tags=[]):
         self.title = title
         self.content = content
@@ -126,3 +155,6 @@ class User(db.Model):
 
     def is_following(self, user):
         return self.followed.filter(followers.c.followed_id == user.id).count() > 0
+
+    def num_followers(self):
+        return self.followed.filter(followers.c.follower_id == self.id).count()

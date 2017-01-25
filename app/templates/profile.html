@@ -41,18 +41,20 @@
         <div class="col-sm-2 settings">
             <p>
                 <a class="settings" href="{{ url_for('get_profile_followers', username=user.username) }}"> {{ user.followers.count() }} follower{% if user.followers.count() != 1 %}s{% endif %}</a> |
-                <a class="settings" href="{{ url_for('get_profile_following', username=user.username) }}">{{ numFollowing }} following</a> |
-            
-                {% if user.id == session['userid'] %}
-                    <a class="settings" href="{{url_for('settings') }}"><span class="glyphicon glyphicon-cog"></span></a>
+                <a class="settings" href="{{ url_for('get_profile_following', username=user.username) }}">{{ user.num_followers() }} following</a> |
                 
-                {% else %}
-                    {% if not isFollowing %}
-                          <a class="settings" href="{{ url_for('follow', followed_id=user.id) }}"><span class="glyphicon glyphicon-heart-empty"></a>
+                {% if currentuser!=None %}
+                    {% if user.id == session['userid'] %}
+                        <a class="settings" href="{{url_for('settings') }}"><span class="glyphicon glyphicon-cog"></span></a>
+                    
                     {% else %}
-                          <a class="settings" href="{{ url_for('unfollow', followed_id=user.id) }}"><span class="glyphicon glyphicon-heart"></a>
-                    {% endif %}
-                {% endif %}   
+                        {% if not currentuser.is_following(user) %}
+                              <a class="settings" href="{{ url_for('follow', followed_id=user.id) }}"><span class="glyphicon glyphicon-heart-empty" style="color:#737373;"></span></a>
+                        {% else %}
+                              <a class="settings" href="{{ url_for('unfollow', followed_id=user.id) }}"><span class="glyphicon glyphicon-heart"></span></a>
+                        {% endif %}
+                    {% endif %} 
+                {% endif %}  
             </p>
         </div>  
     </div>
@@ -61,22 +63,18 @@
     
     <div id="tabs" class="content_box">
         <ul class="nav nav-tabs">
-          <li><a class="post_title" data-toggle="tab" href="#post_box">Posts</a></li>
-          <li><a class="post_title" data-toggle="tab" href="#comment_box">Comments</a></li>
+          <li><a class="post_title" data-toggle="tab" href="#profile_post_box">Posts</a></li>
+          <li><a class="post_title" data-toggle="tab" href="#profile_comment_box">Comments</a></li>
         </ul>
         
-        <div class="tab-content">
-          <div id="post_box" class="tab-pane fade in active">
-            <div class="container-fluid post_list" style="padding-top:15px;">
+        <div class="tab-content" style="padding-top:15px;">
+            <div id="profile_post_box" class="container-fluid post_list tab-pane fade in active" style="padding-top:15px;">
                 {% include 'postlist.html' %}
             </div>
-          </div>
-          
-          <div id="comment_box" class="tab-pane fade" style="padding-top:15px;">
-            <div class="container-fluid post_list">
+
+            <div id="profile_comment_box" class="container-fluid post_list tab-pane fade">
                 {% include 'commentprofilelist.html' %}
             </div>
-          </div>
         </div>
     </div>   
 </div>

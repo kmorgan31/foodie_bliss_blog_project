@@ -191,3 +191,7 @@ footer {
     text-align: right;
     font-family: 'Josefin Sans', sans-serif;
 }
+
+.post-buttons {
+    margin-left:20px;
+}
