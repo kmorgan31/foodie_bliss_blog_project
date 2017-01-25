@@ -1,9 +1,9 @@
 <div class="infinite-scroll">
     
     <div class="text-right">
-      {% if filter!="" and session['path'] == '/' %}
+      {% if filter_by !="None" and session['path'] == '/' %}
         <span class="desc">Filter: </span>
-        <span class="label label-primary">{{ filter }}</span>
+        <a class="label label-primary filter-none">{{ filter_by }} <span class="glyphicon glyphicon-remove"></span></a>
       {% endif %}
     </div>
     <br>
@@ -86,5 +86,16 @@
   $(".remove-post").on("click", function() {
     var postId = $(this).attr('id');
     $(".modal-body #post_id").val( postId );
+  });
+
+  $('.filter-none').on("click", function(){
+     $.ajax({
+         type: "GET",
+         url: "/",
+         data: {"filter_by": "None"},
+         success: function(data){
+             $("#post_list").html(data.result);
+         }
+     })
   });
 </script>

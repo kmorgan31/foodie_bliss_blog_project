@@ -15,21 +15,21 @@ def index():
     tag_list = get_tags()
 
      #if filtered
-    if(request.args.get('category_id')):
-        category_id = int(request.args.get('category_id').encode('UTF8'))
-        
-        if(category_id!=0):
-            post_list = db.session.query(Post, User).join(User).filter(Post.created_by==User.id) \
-                        .filter(Post.categories.any(Tag.id == category_id)) \
-                        .order_by(Post.created_at.desc()).all()
-            tag_name = db.session.query(Tag).filter_by(id=category_id).first().name
+    if(request.args.get('filter_by')):
+        filter_by=request.args.get('filter_by').encode('UTF8')
 
-        else:
-            post_list = db.session.query(Post, User).join(User).filter(Post.created_by==User.id).order_by(Post.created_at.desc()).all()
-            tag_name = ""            
-            
-        return jsonify({'result': render_template('postlist.html', post_list=post_list, filter=tag_name)})
+        q = db.session.query(Post, User).join(User).filter(Post.created_by==User.id)
         
+        if(filter_by=="Subscribed"):
+            q = q.join(followers, (followers.c.followed_id == User.id)).filter(followers.c.follower_id == currentuser.id)
+            
+        elif(filter_by!="None"): #category
+            q = q.filter(Post.categories.any(Tag.name == filter_by))
+        
+        post_list = q.order_by(Post.created_at.desc()).all()
+        
+        return jsonify({'result': render_template('postlist.html', post_list=post_list, filter_by=filter_by)})
+       
     else:
         #get all posts
         post_list = db.session.query(Post, User).join(User).filter(Post.created_by==User.id).order_by(Post.created_at.desc()).all()
@@ -39,7 +39,7 @@ def index():
         else:
             user_list = []
         
-        return render_template("index.html", currentuser=currentuser, post_list=post_list, user_list=user_list,tag_list=tag_list, filter="") #generates html based on template
+        return render_template("index.html", currentuser=currentuser, post_list=post_list, user_list=user_list,tag_list=tag_list, filter_by="None") #generates html based on template
 
 
 @app.route('/about')
