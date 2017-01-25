@@ -68,6 +68,9 @@
         <ul class="nav nav-tabs">
           <li><a class="post_title" data-toggle="tab" href="#profile_post_box">Posts</a></li>
           <li><a class="post_title" data-toggle="tab" href="#profile_comment_box">Comments</a></li>
+          {% if user.id == session['userid'] %}
+          <li><a class="post_title" data-toggle="tab" href="#profile_favourites_box">Favourites</a></li>
+          {% endif %}
         </ul>
         
         <div class="tab-content" style="padding-top:15px;">
@@ -77,6 +80,10 @@
 
             <div id="profile_comment_box" class="container-fluid post_list tab-pane fade">
                 {% include 'commentprofilelist.html' %}
+            </div>
+
+            <div id="profile_favourites_box" class="container-fluid post_list tab-pane fade">
+                {% include 'favouriteslist.html' %}
             </div>
         </div>
     </div>   
