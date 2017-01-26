@@ -33,8 +33,6 @@ Current Features:
 
 Features to Implement:
 - Filter Posts by Trending
-- Add Number of times Favourited to Post
-- Add Number of Posts to User
 
 Optional Features:
 - Comments - Edit, Delete
