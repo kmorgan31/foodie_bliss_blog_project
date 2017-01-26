@@ -41,6 +41,9 @@
             {% for tag in post[0].get_post_tags() %}
                 <span class="label label-primary">{{ tag.name }}</span>
             {% endfor %}
+
+            <span class="badge pull-right" style="vertical-align:middle;background-color:#EB008A;">{{ post[0].num_favourites() }}</span>
+
           </div>
           
           <div class="col-sm-12">
