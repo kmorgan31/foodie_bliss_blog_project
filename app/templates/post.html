@@ -13,7 +13,7 @@
         </div>
 
         <div class="col-xs-4 text-right">
-          <span class="desc">{{post[0].created_at.strftime('%Y-%m-%d')}}</span>
+          <span class="desc">{{ post[0].created_at|local }}</span>
           
           {% if currentuser!=None %}
           
@@ -24,17 +24,17 @@
                {% else %}
                   
                       {% if not post[0].has_favourited(currentuser) %}
-                          <!--<a class="settings" href="{{ url_for('favourite', postid=post[0].id) }}"><span class="glyphicon glyphicon-heart-empty" style="color:#737373;"></span></a>-->
                           <a class="settings" id="favourite_link" onClick="favourite({{post[0].id}})"><span class="glyphicon glyphicon-heart-empty" style="color:#737373;"></span></a>
                       {% else %}
-                          <!--<a class="settings" href="{{ url_for('unfavourite', postid=post[0].id) }}"><span class="glyphicon glyphicon-heart"></span></a>-->
                           <a class="settings" id="favourite_link" onClick="unfavourite({{post[0].id}})"><span class="glyphicon glyphicon-heart"></span></a>
                       {% endif %}
                       
                   {% endif %}
               </span>
+          {% endif %}
 
-              {% endif %}
+          &nbsp;
+          <span class="badge pull-right" style="vertical-align:middle;background-color:#EB008A;" id="num_favourites">{{ post[0].num_favourites() }}</span>
         </div>
 
         <div class="col-sm-12">
@@ -128,6 +128,7 @@
               $("#favourite_link span").attr("class", "glyphicon glyphicon-heart")
                                        .attr("style", "color:#EB008A;");
               $("#favourite_link").attr("onClick", "unfavourite("+post_id.toString()+")");
+              $("#num_favourites").html(data);
           }
         })
     };
@@ -140,6 +141,7 @@
               $("#favourite_link span").attr("class", "glyphicon glyphicon-heart-empty")
                                        .attr("style", "color:#737373;");
               $("#favourite_link").attr("onClick", "favourite("+post_id.toString()+")");
+              $("#num_favourites").html(data);
           }
         })
     };

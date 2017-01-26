@@ -245,7 +245,7 @@ def favourite(postid):
 
     db.session.add(u)
     db.session.commit()
-    return "True"
+    return str(post.num_favourites())
     # return redirect(url_for('post', postid=postid))
 
 @app.route('/unfavourite/<postid>')
@@ -261,7 +261,7 @@ def unfavourite(postid):
 
     db.session.add(u)
     db.session.commit()
-    return "True"
+    return str(post.num_favourites())
     # return redirect(url_for('post', postid=postid))
 
 @app.route('/profile/<username>/following')
@@ -328,7 +328,7 @@ def follow(followed_id):
 
     db.session.add(u)
     db.session.commit()
-    return "True"
+    return str(follow_user.followers.count())
     # return redirect(session['path'])
 
 @app.route('/unfollow/<followed_id>')
@@ -345,7 +345,7 @@ def unfollow(followed_id):
 
     db.session.add(u)
     db.session.commit()
-    return "True"
+    return str(follow_user.followers.count())
     # return redirect(session['path'])
 
 @app.route('/search', methods=['POST'])

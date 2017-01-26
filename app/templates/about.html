@@ -3,9 +3,36 @@
 {% block main %}
 
 <div class="container-fluid">
-  <h2>About</h2>
-  <h4>Lorem ipsum..</h4> 
-  <p>Foodie Bliss was born out of a need for Flask practice and a love of Food</p>
+
+  <h2 class="post_title">About</h2>
+  <span class="desc">Foodie Bliss was born out of a need for Flask practice and a love of food</span>
+  
+  <hr>
+  <br>
+  
+  <div class="row" id="technologies">
+    <div class="col-xs-4 col-offset-xs-2 about-card">
+      <h4 class="post-link">Technologies used:</h4>
+      <ul>
+        <li>Python - Flask</li>
+        <li>SQLAlchemy</li>
+        <li>PostgreSQL</li>
+        <li>JQuery</li>
+        <li>Bootstrap</li>
+        <li>Jinja2</li>
+        <li>HTML/CSS</li>
+        <li>JavaScript - Ajax requests</li>
+      </ul>
+    </div>
+    
+    <div class="col-xs-4">
+      <img class="tech-logos" src="https://www.python.org/static/opengraph-icon-200x200.png">
+      <img class="tech-logos" src="http://flask.pocoo.org/docs/0.11/_static/flask.png">
+      <img class="tech-logos" src="https://upload.wikimedia.org/wikipedia/commons/2/2e/Pg_logo.png">
+      <img class="tech-logos" src="http://seeklogo.com/images/B/bootstrap-logo-3C30FB2A16-seeklogo.com.png">
+    </div>
+  </div>
+
 </div>
 
 {% endblock %}
