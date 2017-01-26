@@ -9,11 +9,11 @@ Technologies used:
 - Bootstrap
 - Jinja2
 - HTML/CSS
-- JavaScript
+- JavaScript - Ajax requests
 
 Current Features:
 - User management - Add New, Edit Profile
-- User Validation (Signup and Login)
+- User Validation & Verification (Signup and Login)
 - Post management - Add, Edit, Delete
 - Comment management - Add
 - Subscriptions
@@ -21,22 +21,25 @@ Current Features:
     - View Followed on HomePage
     - View Followers, Followed from Profile
   - Favourite/Unfavourite Posts
+    - View Favourited from Profile
 - Filter Posts on HomePage by: 
   - Category
   - Subscribed Users
   - Favourited
+  - Hot
   
 - Search Posts by: 
   - Title
 
 Features to Implement:
-- Filter Posts by Hot, Trending
-- View Favourited/Saved Posts from Profile
-- User Verification against DB
+- Filter Posts by Trending
+- Add Number of times Favourited to Post
+- Add Number of Posts to User
 
 Optional Features:
 - Comments - Edit, Delete
 - Search Posts by Category
+- Filter Posts by Recent
 
 
 Setup:
