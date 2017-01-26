@@ -4,6 +4,12 @@
 <div class="container" style="padding-top:25px">
     <form method="post" action="/login" data-toggle="validator">
         
+        {% if error!="" %}
+            <div class="alert alert-danger">
+              {{ error }}
+            </div>
+        {% endif %}
+
         <div class="form-group">
             <label for="username"> Username </label>
             <input id="username" name="username" class="form-control" type="text" data-error="Who are you?" required/>

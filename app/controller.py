@@ -297,7 +297,7 @@ def profile(username):
     currentuser = get_currentuser()
     tag_list = get_tags()
     
-    if(username==currentuser.username): 
+    if(currentuser!=None and username==currentuser.username): 
         #current user's profile selected
         user = currentuser
     else:
@@ -309,7 +309,7 @@ def profile(username):
     comment_list = db.session.query(Comment, Post, User).filter_by(created_by=user.id).join(Post).filter(Comment.post_id==Post.id).join(User).filter(Post.created_by==User.id).order_by(Comment.created_at.desc()).all()
 
     #get favourited posts by selected user
-    favourites_list = db.session.query(Post, User).join(User).filter(Post.created_by==User.id).filter(Post.favourites.any(User.id == currentuser.id)).order_by(Post.created_at.desc()).all()
+    favourites_list = db.session.query(Post, User).join(User).filter(Post.created_by==User.id).filter(Post.favourites.any(User.id == user.id)).order_by(Post.created_at.desc()).all()
 
     return render_template("profile.html", currentuser=currentuser, user=user, post_list=post_list, comment_list=comment_list, favourites_list=favourites_list, tag_list=tag_list) #generates html based on template
 
@@ -405,7 +405,7 @@ def utc_to_local(date):
         m = divmod(h[1],60)  # minutes
         s = m[1]  # seconds
         
-        if(h>0):
+        if(h[0]>0):
             ago = str(h[0]) + " hour"
             
             if(h[0]>1):
@@ -413,8 +413,8 @@ def utc_to_local(date):
             
             ago += " ago"
 
-        elif(m>0):
-            ago = str(m[0]) + " minutes"
+        elif(m[0]>0):
+            ago = str(m[0]) + " minute"
             
             if(m[0]>1):
                 ago += "s"
