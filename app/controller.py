@@ -430,5 +430,5 @@ def utc_to_local(date):
         return date.replace(tzinfo=pytz.utc).astimezone(get_localzone()).strftime('%Y-%m-%d')
 
 
-# if __name__ == "__main__": #checks that we only run app when name is called directly (as main)
-#     app.run(host="0.0.0.0", port=8080, debug=True) #start webserver/app
+if __name__ == "__main__": #checks that we only run app when name is called directly (as main)
+    app.run(host="0.0.0.0", port=8080, debug=True) #start webserver/app
