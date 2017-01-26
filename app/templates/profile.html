@@ -65,10 +65,10 @@
     
     <div id="tabs" class="content_box">
         <ul class="nav nav-tabs">
-          <li><a class="post_title" data-toggle="tab" href="#profile_post_box">Posts</a></li>
-          <li><a class="post_title" data-toggle="tab" href="#profile_comment_box">Comments</a></li>
+          <li><a class="post-title" data-toggle="tab" href="#profile_post_box">Posts</a></li>
+          <li><a class="post-title" data-toggle="tab" href="#profile_comment_box">Comments</a></li>
           {% if user.id == session['userid'] %}
-          <li><a class="post_title" data-toggle="tab" href="#profile_favourites_box">Favourites</a></li>
+          <li><a class="post-title" data-toggle="tab" href="#profile_favourites_box">Favourites</a></li>
           {% endif %}
         </ul>
         
