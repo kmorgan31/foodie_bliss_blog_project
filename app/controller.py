@@ -2,6 +2,12 @@ from app import app, db
 from app.models import Post, User, Comment, Tag, followers, tags_relationship, favourites_relationship
 
 import os
+
+#date imports
+import pytz
+from tzlocal import get_localzone
+from datetime import datetime, timedelta
+
 from flask import Flask
 from flask import render_template #allow use of html templates
 from flask import request, redirect, url_for, session, send_from_directory, jsonify
@@ -29,8 +35,15 @@ def index():
             q = q.filter(Post.favourites.any(User.id == currentuser.id))
          
         elif(filter_by=="Hot"):
-            q = q.join(favourites_relationship, (favourites_relationship.c.post_id == Post.id)).filter(favourites_relationship.count()>20)
+            q = q.join(favourites_relationship, (favourites_relationship.c.post_id == Post.id)).filter(favourites_relationship.count()>100)
             # q = q.filter(Post.favourites.any(count()>0))
+
+        elif(filter_by=="Trending"):
+            q = q.join(favourites_relationship, (favourites_relationship.c.post_id == Post.id)).filter(favourites_relationship.count()>20, favourites_relationship.count()<=100)
+        
+        elif(filter_by=="Recent"):
+            yesterday = datetime.utcnow() - timedelta(days=1)
+            q = q.filter(Post.created_at >= yesterday)
 
         elif(filter_by!="None"): #category
             q = q.filter(Post.categories.any(Tag.name == filter_by))
@@ -381,5 +394,40 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in app.config['ALLOWED_EXTENSIONS']
 
-if __name__ == "__main__": #checks that we only run app when name is called directly (as main)
-    app.run(host="0.0.0.0", port=8080, debug=True) #start webserver/app
+@app.template_filter('local')
+def utc_to_local(date):
+    now = datetime.utcnow().replace(tzinfo=pytz.utc)
+    diff = now - date
+
+    #less than 24hours
+    if(diff.days<1):
+        h = divmod(diff.seconds,3600) #hours
+        m = divmod(h[1],60)  # minutes
+        s = m[1]  # seconds
+        
+        if(h>0):
+            ago = str(h[0]) + " hour"
+            
+            if(h[0]>1):
+                ago += "s"
+            
+            ago += " ago"
+
+        elif(m>0):
+            ago = str(m[0]) + " minutes"
+            
+            if(m[0]>1):
+                ago += "s"
+            
+            ago += " ago"
+            
+        else:
+            ago = "awhile ago"
+
+        return ago
+    else:
+        return date.replace(tzinfo=pytz.utc).astimezone(get_localzone()).strftime('%Y-%m-%d')
+
+
+# if __name__ == "__main__": #checks that we only run app when name is called directly (as main)
+#     app.run(host="0.0.0.0", port=8080, debug=True) #start webserver/app

@@ -27,7 +27,7 @@
           </div>
 
           <div class="col-xs-4 text-right">
-            <span class="desc">{{post[0].created_at.strftime('%Y-%m-%d')}}</span>
+            <span class="desc">{{ post[0].created_at|local }}</span>
             
             {% if currentuser!=None and session['path'] == '/profile/'+currentuser.username %}
             <span class="post-buttons">

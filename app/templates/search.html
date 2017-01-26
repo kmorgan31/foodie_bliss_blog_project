@@ -22,13 +22,15 @@
           </div>
           
           <div class="col-xs-3 text-right">
-            <span class="desc">{{ post[0].created_at.strftime('%Y-%m-%d') }}</span>
+            <span class="desc">{{ post[0].created_at|local }}</span>
           </div>
           
           <div class="col-sm-12">
               {% for tag in post[0].get_post_tags() %}
                   <span class="label label-primary">{{ tag.name }}</span>
               {% endfor %}
+
+              <span class="badge pull-right" style="vertical-align:middle;background-color:#EB008A;">{{ post[0].num_favourites() }}</span>
           </div>
           
           <div class="col-sm-12">
