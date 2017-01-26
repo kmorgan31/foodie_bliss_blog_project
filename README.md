@@ -27,17 +27,15 @@ Current Features:
   - Subscribed Users
   - Favourited
   - Hot
+  - Trending
+  - Recent
   
 - Search Posts by: 
   - Title
 
-Features to Implement:
-- Filter Posts by Trending
-
 Optional Features:
 - Comments - Edit, Delete
 - Search Posts by Category
-- Filter Posts by Recent
 
 
 Setup:
