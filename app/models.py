@@ -158,3 +158,6 @@ class User(db.Model):
 
     def num_followers(self):
         return self.followed.filter(followers.c.follower_id == self.id).count()
+
+    def num_posts(self):
+        return self.posts.filter(Post.created_by == self.id).count()

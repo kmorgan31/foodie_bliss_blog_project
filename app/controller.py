@@ -295,7 +295,10 @@ def profile(username):
     post_list = db.session.query(Post, User).filter_by(created_by=user.id).join(User).filter(Post.created_by==User.id).order_by(Post.created_at.desc()).all()
     comment_list = db.session.query(Comment, Post, User).filter_by(created_by=user.id).join(Post).filter(Comment.post_id==Post.id).join(User).filter(Post.created_by==User.id).order_by(Comment.created_at.desc()).all()
 
-    return render_template("profile.html", currentuser=currentuser, user=user, post_list=post_list, comment_list=comment_list, tag_list=tag_list) #generates html based on template
+    #get favourited posts by selected user
+    favourites_list = db.session.query(Post, User).join(User).filter(Post.created_by==User.id).filter(Post.favourites.any(User.id == currentuser.id)).order_by(Post.created_at.desc()).all()
+
+    return render_template("profile.html", currentuser=currentuser, user=user, post_list=post_list, comment_list=comment_list, favourites_list=favourites_list, tag_list=tag_list) #generates html based on template
 
 @app.route('/follow/<followed_id>')
 def follow(followed_id):
