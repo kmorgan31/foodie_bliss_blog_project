@@ -1,4 +1,5 @@
 <div class="infinite-scroll">
+
     {% if comment_list|length == 0 %}
     <div class="container-fluid text-center">
       <p>No comments, huh...</p>
@@ -8,8 +9,8 @@
   
       {% for comment in comment_list %}
       <div name="comment_{{comment[0].id}}" id="{{comment[0].id}}"  class="bs-callout bs-callout-danger col-sm-12">
-          <div class="col-xs-10 post-title" style="display:inline;">
-            <a href="{{url_for('post', postid=comment[0].post_id) }}">{{comment[1].title}}</a> &nbsp;
+          <div class="col-xs-10" style="display:inline;">
+            <h4 style="display:inline;"><a class="post-link" href="{{url_for('post', postid=comment[0].post_id) }}">{{comment[1].title}}</a>&nbsp;</h4>
             <span class="desc">by <a class="post-author-link" href="{{url_for('profile', username=comment[2].username) }}">{{ comment[2].username }}</a></span>
           </div>
           

@@ -28,9 +28,9 @@ def index():
         q = db.session.query(Post, User).join(User).filter(Post.created_by==User.id)
         
         if(filter_by=="Subscribed"):
-            # q = q.join(followers, (followers.c.followed_id == User.id)).filter(followers.c.follower_id == currentuser.id)
-            q = q.filter(User.followed.any(User.id == currentuser.id))
-
+            q = q.join(followers, (followers.c.followed_id == User.id)).filter(followers.c.follower_id == currentuser.id)
+            # q = q.filter(User.followed.any(User.id == currentuser.id))
+            
         elif(filter_by=="Favourited"):
             # q = q.join(favourites_relationship, (favourites_relationship.c.post_id == Post.id)).filter(favourites_relationship.c.user_id == currentuser.id)
             q = q.filter(Post.favourites.any(User.id == currentuser.id))

@@ -2,7 +2,7 @@
 
 {% block main %}
 
-<div class="container" style="padding-top:25px;">
+<div class="container-fluid" style="padding-top:25px;">
     <!--<div name="post_{{post[0].id}}" id="{{post[0].id}}"  class="col-sm-12">-->
         <div = class="col-xs-8">
           <h3 class="post-title" style="display:inline;">{{post[0].title}}&nbsp;</h3>
@@ -15,32 +15,30 @@
         <div class="col-xs-4 text-right">
           <span class="desc">{{ post[0].created_at|local }}</span>
           
-          {% if currentuser!=None %}
-          
+          {% if session['username'] == post[1].username %}
               <span class="post-buttons">
-                {% if session['username'] == post[1].username %}
-                  <a class="post-link" href="{{url_for('edit_post', postid=post[0].id) }}"><span class="glyphicon glyphicon-pencil"></span></a>
-                  <a class="post-link" data-toggle="modal" data-target="#delete_confirm_modal"><span class="glyphicon glyphicon-remove"></span></a>
-               {% else %}
-                  
-                      {% if not post[0].has_favourited(currentuser) %}
-                          <a class="settings" id="favourite_link" onClick="favourite({{post[0].id}})"><span class="glyphicon glyphicon-heart-empty" style="color:#737373;"></span></a>
-                      {% else %}
-                          <a class="settings" id="favourite_link" onClick="unfavourite({{post[0].id}})"><span class="glyphicon glyphicon-heart"></span></a>
-                      {% endif %}
-                      
-                  {% endif %}
+                <a class="post-link" href="{{url_for('edit_post', postid=post[0].id) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                <a class="post-link" data-toggle="modal" data-target="#delete_confirm_modal"><span class="glyphicon glyphicon-remove"></span></a>
               </span>
           {% endif %}
-
-          &nbsp;
-          <span class="badge pull-right" style="vertical-align:middle;background-color:#EB008A;" id="num_favourites">{{ post[0].num_favourites() }}</span>
         </div>
 
         <div class="col-sm-12">
             {% for tag in post[0].get_post_tags() %}
                 <span class="label label-primary">{{ tag.name }}</span>
             {% endfor %}
+
+            <span class="pull-right">
+                {% if currentuser!=None %}
+                    {% if not post[0].has_favourited(currentuser) %}
+                        <a class="settings" id="favourite_link" onClick="favourite({{post[0].id}})" style="vertical-align:middle;"><span class="glyphicon glyphicon-heart-empty" style="color:#737373;"></span></a>
+                    {% else %}
+                        <a class="settings" id="favourite_link" onClick="unfavourite({{post[0].id}})" style="vertical-align:middle;"><span class="glyphicon glyphicon-heart"></span></a>
+                    {% endif %}
+                {% endif %}
+                          
+               <span class="badge" style="vertical-align:middle;background-color:#EB008A;" id="num_favourites">{{ post[0].num_favourites() }}</span>
+           </span>
         </div>
 
         <div class="col-sm-12" style="padding-top:15px;">
